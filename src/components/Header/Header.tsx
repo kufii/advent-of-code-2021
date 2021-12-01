@@ -1,5 +1,4 @@
 import { h } from 'preact'
-import { Link } from 'preact-router/match'
 import { Icon } from '/components'
 import { setNavOpen, useStore } from '/store'
 import style from './style.css'
@@ -8,9 +7,9 @@ export const Header = () => {
   const { navOpen } = useStore()
   return (
     <header class={style.header}>
-      <Link class={style.logo} href="/">
+      <a class={style.logo} href="#/">
         advent of code 2021
-      </Link>
+      </a>
       <div class={style.nav}>
         <button
           class={style.navBtn}
