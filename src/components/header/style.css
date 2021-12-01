@@ -6,6 +6,7 @@
   color: var(--color-text-on-primary);
   background: var(--color-primary);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  height: 3.5rem;
   z-index: var(--z-index-front);
 }
 
@@ -22,22 +23,77 @@
   font-size: 1rem;
 }
 
-.header nav a {
+.navBtn {
   display: flex;
   place-items: center;
   padding: 1em;
   height: 100%;
   background: rgba(255, 255, 255, 0);
   text-decoration: none;
+  border: none;
   color: var(--color-text-on-primary);
 }
 
-.header nav a:hover,
-.header nav a:active,
-.header nav a:focus-visible {
+.navBtn:hover,
+.navBtn:active,
+.navBtn:focus-visible {
   background: rgba(0, 0, 0, 0.2);
 }
 
-.header nav a.active {
+.navBtn.active {
   background: rgba(0, 0, 0, 0.4);
+}
+
+.sideNav.active {
+  position: fixed;
+  top: 3.5rem;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: var(--z-index-overlay);
+}
+
+.sideNav nav {
+  position: fixed;
+  top: 3.5rem;
+  bottom: 0;
+  right: 0;
+  min-width: 20rem;
+  max-width: 100%;
+  background-color: white;
+  color: black;
+  transform: translateX(100%);
+  transition: all 0.2s ease;
+}
+
+.sideNav.active nav {
+  transform: translateX(0);
+}
+
+.sideNav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sideNav a {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  text-decoration: none;
+  color: black;
+}
+
+.sideNav a:hover,
+.sideNav a:active,
+.sideNav a:focus-visible {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.sideNav a.active {
+  background: var(--color-primary-dark);
+  color: var(--color-text-on-primary);
 }

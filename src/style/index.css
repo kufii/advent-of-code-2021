@@ -2,6 +2,7 @@ html,
 body {
   --color-bg: #0f0f23;
   --color-primary: #673ab8;
+  --color-primary-dark: #532e93;
   --color-text: #ccc;
   --color-text-on-primary: #fff;
   --font-family: 'Source Code Pro', monospace;
