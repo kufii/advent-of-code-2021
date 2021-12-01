@@ -14,22 +14,10 @@ body {
   --z-index-front: 10;
   --z-index-overlay: 20;
   --border-radius: 0.4rem;
-  height: 100%;
-  width: 100%;
-  padding: 0;
-  margin: 0;
   background: var(--color-bg);
   font-family: var(--font-family);
   font-weight: var(--font-weight-normal);
   color: var(--color-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-#app {
-  height: 100%;
 }
