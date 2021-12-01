@@ -2,7 +2,6 @@ import { h } from 'preact'
 import { Route, Router } from 'preact-router'
 import { createHashHistory } from 'history'
 
-import { baseRoute } from '../../baseRoute'
 import NotFound from '../../routes/NotFound'
 import ViewDay from '../../routes/ViewDay'
 import { Header } from '../Header'
@@ -21,7 +20,7 @@ export const App = () => {
       <Header />
       <div class={style.container}>
         <Router history={history as any}>
-          <Route path={`${baseRoute}/:day?`} component={ViewDay} />
+          <Route path="/:day?" component={ViewDay} />
           <NotFound default />
         </Router>
       </div>
