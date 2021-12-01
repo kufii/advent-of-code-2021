@@ -31,6 +31,7 @@
   text-decoration: none;
   border: none;
   color: var(--color-text-on-primary);
+  cursor: pointer;
 }
 
 .navBtn:hover,

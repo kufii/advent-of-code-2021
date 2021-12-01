@@ -2,10 +2,11 @@
   color: var(--color-primary);
   background: var(--color-bg);
   border: 0.1em solid var(--color-primary);
-  padding: 0.2em 0.8em;
+  padding: 0.4em 0.8em;
   border-radius: 2rem;
   text-decoration: none;
   font-size: 1.2rem;
+  line-height: 1.2rem;
   font-weight: var(--font-weight-bold);
   font-family: var(--font-family);
   cursor: pointer;
