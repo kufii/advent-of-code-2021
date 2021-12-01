@@ -1,13 +1,13 @@
 import { h } from 'preact'
+import { useEffect } from 'preact/hooks'
 import { Route, Router } from 'preact-router'
 import { createHashHistory } from 'history'
 
-import NotFound from '../../routes/NotFound'
-import ViewDay from '../../routes/ViewDay'
-import { Header } from '../Header'
+import { resetStore } from '/store'
+import { Header } from '/components'
+import NotFound from '/routes/NotFound'
+import ViewDay from '/routes/ViewDay'
 import style from './style.css'
-import { useEffect } from 'preact/hooks'
-import { resetStore } from '../../store'
 
 export const App = () => {
   const history = createHashHistory()

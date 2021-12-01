@@ -1,5 +1,5 @@
 import { h } from 'preact'
-import { classNames } from '../../shared/web-utilities/util'
+import { classNames } from '/shared/web-utilities/util'
 import style from './style.css'
 
 interface Props {

@@ -1,7 +1,7 @@
 import { RefObject } from 'preact'
 import { useEffect } from 'preact/hooks'
 import { usePropRef } from './use-prop-ref'
-import { debounce, throttle } from '../util'
+import { debounce, throttle } from '/shared/web-utilities/util'
 
 /** not passing ref will fallback on window */
 export const useDOMEvent = <T extends keyof WindowEventMap>({

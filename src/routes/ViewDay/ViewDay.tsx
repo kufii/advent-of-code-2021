@@ -1,8 +1,7 @@
 import { h } from 'preact'
-import { Button } from '../../components/Button'
-import { Solution } from '../../components/Solution'
-import days, { Solution as SolutionType } from '../../solutions'
-import { setPart, useStore } from '../../store'
+import { Button, Solution } from '/components'
+import days, { Solution as SolutionType } from '/solutions'
+import { setPart, useStore } from '/store'
 import style from './style.css'
 
 interface Props {

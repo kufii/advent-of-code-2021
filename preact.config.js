@@ -1,5 +1,6 @@
 export default {
   webpack(config, env, helpers) {
+    config.resolve.modules.push(env.src)
     const publicPath = process.env.GITHUB_PAGES
       ? `/${process.env.GITHUB_PAGES}/`
       : '/'

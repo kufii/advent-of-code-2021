@@ -1,9 +1,8 @@
 import { h } from 'preact'
 import { Link } from 'preact-router/match'
 import { useState } from 'preact/hooks'
-import { classNames } from '../../shared/web-utilities/util'
-import { Icon } from '../Icon'
-import { Portal } from '../Portal'
+import { classNames } from '/shared/web-utilities/util'
+import { Icon, Portal } from '/components'
 import style from './style.css'
 
 export const Header = () => {

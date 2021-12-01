@@ -1,6 +1,5 @@
 import { h } from 'preact'
-import { Button } from '../Button'
-import { Icon } from '../Icon'
+import { Button, Icon } from '/components'
 import style from './style.css'
 
 interface Props {

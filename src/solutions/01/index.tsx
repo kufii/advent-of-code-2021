@@ -1,5 +1,5 @@
 import { h } from 'preact'
-import { Answer } from '../../components/Answer'
+import { Answer } from '/components'
 import { range } from '../util'
 import input from './input'
 
