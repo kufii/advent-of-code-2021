@@ -43,7 +43,7 @@ export const Header = () => {
                 <Link
                   onClick={closeNav}
                   activeClassName={style.active}
-                  href={`${baseRoute}/`}
+                  href={`${baseRoute}#/1`}
                   tabIndex={isNavOpen ? undefined : -1}
                 >
                   Day 1
@@ -53,7 +53,7 @@ export const Header = () => {
                 <Link
                   onClick={closeNav}
                   activeClassName={style.active}
-                  href={`${baseRoute}/2`}
+                  href={`${baseRoute}#/2`}
                   tabIndex={isNavOpen ? undefined : -1}
                 >
                   Day 2
@@ -63,7 +63,7 @@ export const Header = () => {
                 <Link
                   onClick={closeNav}
                   activeClassName={style.active}
-                  href={`${baseRoute}/3`}
+                  href={`${baseRoute}#/3`}
                   tabIndex={isNavOpen ? undefined : -1}
                 >
                   Day 3

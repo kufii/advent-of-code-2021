@@ -16,7 +16,9 @@
     "check": "npm run type-check && npm run lint && npm run check:format"
   },
   "dependencies": {
+    "@types/history": "^4.7.8",
     "feather-icons": "^4.28.0",
+    "history": "^4.10.1",
     "mergerino": "^0.4.0",
     "preact": "^10.6.2",
     "preact-render-to-string": "^5.1.19",
