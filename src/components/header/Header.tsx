@@ -23,6 +23,7 @@ export const Header = () => {
             setIsNavOpen(!isNavOpen)
             e.stopImmediatePropagation()
           }}
+          aria-label="open navigation menu"
         >
           <Icon name="menu" />
         </button>
@@ -43,6 +44,7 @@ export const Header = () => {
                   onClick={closeNav}
                   activeClassName={style.active}
                   href={`${baseRoute}/`}
+                  tabIndex={isNavOpen ? undefined : -1}
                 >
                   Day 1
                 </Link>
@@ -52,6 +54,7 @@ export const Header = () => {
                   onClick={closeNav}
                   activeClassName={style.active}
                   href={`${baseRoute}/2`}
+                  tabIndex={isNavOpen ? undefined : -1}
                 >
                   Day 2
                 </Link>
@@ -61,6 +64,7 @@ export const Header = () => {
                   onClick={closeNav}
                   activeClassName={style.active}
                   href={`${baseRoute}/3`}
+                  tabIndex={isNavOpen ? undefined : -1}
                 >
                   Day 3
                 </Link>

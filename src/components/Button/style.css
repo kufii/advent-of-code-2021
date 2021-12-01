@@ -31,3 +31,8 @@
 .button.plain {
   border: none;
 }
+
+.button.compact {
+  padding: 0;
+  border: none;
+}

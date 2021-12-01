@@ -5,6 +5,7 @@ import style from './style.css'
 interface Props {
   primary?: boolean
   plain?: boolean
+  compact?: boolean
   ariaLabel?: string
   onClick(): void
   children: JSX.Element | string
@@ -13,6 +14,7 @@ interface Props {
 export const Button = ({
   primary,
   plain,
+  compact,
   ariaLabel,
   onClick,
   children
@@ -21,7 +23,8 @@ export const Button = ({
     class={classNames(
       style.button,
       primary && style.primary,
-      plain && style.plain
+      plain && style.plain,
+      compact && style.compact
     )}
     onClick={onClick}
     aria-label={ariaLabel}

@@ -1,2 +1,1 @@
-import { ViewDay } from './ViewDay'
-export default ViewDay
+export { ViewDay as default } from './ViewDay'
