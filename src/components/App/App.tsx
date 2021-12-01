@@ -4,11 +4,10 @@ import { Route, Router } from 'preact-router'
 import { createHashHistory } from 'history'
 
 import { resetStore } from '/store'
-import { Header } from '/components'
+import { Header, Nav } from '/components'
 import NotFound from '/routes/NotFound'
 import ViewDay from '/routes/ViewDay'
 import style from './style.css'
-import { Nav } from '../Nav'
 
 export const App = () => {
   const history = createHashHistory()
