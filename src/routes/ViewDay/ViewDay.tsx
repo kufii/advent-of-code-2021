@@ -6,13 +6,13 @@ import style from './style.css'
 import NotFound from '../NotFound'
 
 interface Props {
-  day?: number
+  day?: string
 }
 
-export const ViewDay = ({ day }: Props) => {
-  day = day || 1
+export const ViewDay = ({ day: dayString }: Props) => {
+  const day = Number(dayString || '1')
   const { part, showCode } = useStore()
-  if (isNaN(day)) return <NotFound />
+  if (!Number.isInteger(day) || day < 1 || day > 25) return <NotFound />
   const solution = days[day - 1] as SolutionType | undefined
   return (
     <div>

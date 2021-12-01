@@ -16,9 +16,9 @@
   min-width: 20rem;
   max-width: 100%;
   background-color: white;
-  color: black;
   transform: translateX(100%);
   transition: all 0.2s ease;
+  overflow-y: scroll;
   z-index: var(--z-index-overlay);
 }
 
@@ -37,9 +37,10 @@
 .sideNav a {
   display: block;
   width: 100%;
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   text-decoration: none;
   color: black;
+  font-weight: var(--font-weight-bold);
 }
 
 .sideNav a:hover,
