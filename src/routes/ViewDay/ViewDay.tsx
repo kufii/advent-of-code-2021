@@ -1,8 +1,9 @@
 import { h } from 'preact'
-import { Button, Solution } from '/components'
+import { Button, CodeViewer, Solution } from '/components'
 import days, { Solution as SolutionType } from '/solutions'
-import { setPart, useStore } from '/store'
+import { setPart, setShowCode, useStore } from '/store'
 import style from './style.css'
+import NotFound from '../NotFound'
 
 interface Props {
   day?: number
@@ -10,7 +11,8 @@ interface Props {
 
 export const ViewDay = ({ day }: Props) => {
   day = day || 1
-  const part = useStore((s) => s.part)
+  const { part, showCode } = useStore()
+  if (isNaN(day)) return <NotFound />
   const solution = days[day - 1] as SolutionType | undefined
   return (
     <div>
@@ -26,7 +28,11 @@ export const ViewDay = ({ day }: Props) => {
             {solution?.Part2 && (
               <Button onClick={() => setPart(2)}>Part 2</Button>
             )}
+            <Button onClick={() => setShowCode(!showCode)} plain>
+              {showCode ? 'Hide code' : 'Show code'}
+            </Button>
           </div>
+          <CodeViewer day={day} />
           {solution && part ? (
             <Solution solution={solution} part={part} />
           ) : null}

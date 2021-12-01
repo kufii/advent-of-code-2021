@@ -1,0 +1,23 @@
+.container {
+  position: relative;
+  background: var(--color-bg-dark);
+  border: 0.1rem solid var(--color-primary);
+  padding: 0.8rem;
+  border-radius: var(--border-radius);
+}
+
+.container:before {
+  content: attr(data-lang);
+  color: var(--color-text-subdued);
+  font-size: 0.8rem;
+  position: absolute;
+  right: 0.4rem;
+  top: 0.2rem;
+}
+
+.container,
+.container code {
+  font-family: 'Operator Mono Ssm Lig', 'Operator Mono Lig', 'Operator Mono Ssm',
+    'Operator Mono', var(--font-family);
+  font-size: 0.9rem;
+}
