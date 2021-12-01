@@ -7,12 +7,14 @@ interface State {
   part: Part
   showCode: boolean
   code: string
+  navOpen: boolean
 }
 
 const initialState: State = {
   part: null,
   showCode: false,
-  code: ''
+  code: '',
+  navOpen: false
 }
 
 export const useStore = staterino({
@@ -30,3 +32,5 @@ export const setPart = (part: Part) => set({ part })
 export const setShowCode = (showCode: boolean) => set({ showCode })
 
 export const setCode = (code: string) => set({ code })
+
+export const setNavOpen = (navOpen: boolean) => set({ navOpen })

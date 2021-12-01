@@ -8,6 +8,7 @@ import { Header } from '/components'
 import NotFound from '/routes/NotFound'
 import ViewDay from '/routes/ViewDay'
 import style from './style.css'
+import { Nav } from '../Nav'
 
 export const App = () => {
   const history = createHashHistory()
@@ -16,13 +17,16 @@ export const App = () => {
     return () => unlisten()
   }, [history])
   return (
-    <div id="preact_root">
+    <div id="preact_root" class={style.container}>
       <Header />
       <div class={style.container}>
-        <Router history={history as any}>
-          <Route path="/:day?" component={ViewDay} />
-          <NotFound default />
-        </Router>
+        <Nav />
+        <div class={style.pageContainer}>
+          <Router history={history as any}>
+            <Route path="/:day?" component={ViewDay} />
+            <NotFound default />
+          </Router>
+        </div>
       </div>
     </div>
   )

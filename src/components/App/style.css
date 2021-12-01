@@ -1,4 +1,9 @@
 .container {
+  position: relative;
+  height: 100%;
+}
+
+.pageContainer {
   padding: 1rem;
   margin: auto;
   max-width: 100ch;
