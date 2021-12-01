@@ -4,6 +4,7 @@
   border: 0.1rem solid var(--color-primary);
   padding: 0.8rem;
   border-radius: var(--border-radius);
+  overflow-x: scroll;
 }
 
 .container:before {
