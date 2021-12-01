@@ -1,9 +1,10 @@
 import { h } from 'preact'
-import { Button, CodeViewer, Solution } from '/components'
+import { Button, CodeViewer, Icon, Solution } from '/components'
 import days, { Solution as SolutionType } from '/solutions'
 import { setPart, setShowCode, useStore } from '/store'
 import style from './style.css'
 import NotFound from '../NotFound'
+import { newTab } from '/shared/web-utilities/util'
 
 interface Props {
   day?: string
@@ -16,7 +17,16 @@ export const ViewDay = ({ day: dayString }: Props) => {
   const solution = days[day - 1] as SolutionType | undefined
   return (
     <div>
-      <h1>Day {day}</h1>
+      <h1>
+        Day {day}{' '}
+        <a
+          class={style.link}
+          href={`https://adventofcode.com/2021/day/${day}`}
+          {...newTab}
+        >
+          <Icon name="external-link" />
+        </a>
+      </h1>
       {!solution?.Part1 && !solution?.Part2 ? (
         <p>Day {day} is not yet implemented</p>
       ) : (

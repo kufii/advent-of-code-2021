@@ -30,3 +30,5 @@ export const throttle = <T extends AFunc>(
 
 export const classNames = (...classNames: (string | boolean | undefined)[]) =>
   classNames.filter(Boolean).join(' ')
+
+export const newTab = { target: '_blank', rel: 'noopener noreferrer' }

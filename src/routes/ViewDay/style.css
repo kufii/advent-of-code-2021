@@ -8,3 +8,14 @@
   display: flex;
   gap: 0.5rem;
 }
+
+.link {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.link:hover,
+.link:active,
+.link:focus-visible {
+  filter: brightness(150%);
+}
