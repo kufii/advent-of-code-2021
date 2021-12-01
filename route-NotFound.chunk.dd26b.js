@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[2],{F46F:function(n,t,e){"use strict";e.r(t),e.d(t,"default",(function(){return u}));var c=e("hosL"),o=e("ox/y"),r=e("JcCB"),u=function(){return Object(c.h)("div",null,Object(c.h)("h1",null,"Error 404"),Object(c.h)("p",null,"That page doesn't exist."),Object(c.h)(o.Link,{href:"".concat(r.a,"/")},"Back to Home"))}}}]);
+//# sourceMappingURL=route-NotFound.chunk.dd26b.js.map
