@@ -1,0 +1,9 @@
+.container {
+  border: 0.1rem solid var(--color-primary);
+  padding: 0.8rem;
+  border-radius: 0.4rem;
+}
+
+.container h2 {
+  margin-top: 0;
+}

@@ -17,9 +17,11 @@
   },
   "dependencies": {
     "feather-icons": "^4.28.0",
+    "mergerino": "^0.4.0",
     "preact": "^10.6.2",
     "preact-render-to-string": "^5.1.19",
-    "preact-router": "^3.2.1"
+    "preact-router": "^3.2.1",
+    "staterino": "^2.0.0"
   },
   "devDependencies": {
     "@types/enzyme": "^3.10.10",

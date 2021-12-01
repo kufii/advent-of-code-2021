@@ -1,0 +1,33 @@
+.button {
+  color: var(--color-primary);
+  background: var(--color-bg);
+  border: 0.1em solid var(--color-primary);
+  padding: 0.2em 0.8em;
+  border-radius: 2rem;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-family);
+  cursor: pointer;
+}
+
+.button:hover,
+.button:focus-visible {
+  filter: brightness(150%);
+}
+
+.button.primary {
+  color: var(--color-text-on-primary);
+  background: var(--color-primary);
+}
+
+.button.primary:hover,
+.button.primary:focus-visible {
+  filter: unset;
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+.button.plain {
+  border: none;
+}
