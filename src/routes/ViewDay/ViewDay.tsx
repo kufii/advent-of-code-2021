@@ -37,9 +37,7 @@ export const ViewDay = ({ day: dayString }: Props) => {
               <Button onClick={() => setPart(1)}>Part 1</Button>
             )}
             {solution?.Part2 && (
-              <Button onClick={() => setPart(2)} primary>
-                Part 2
-              </Button>
+              <Button onClick={() => setPart(2)}>Part 2</Button>
             )}
             <Button onClick={() => setShowCode(!showCode)} plain>
               {showCode ? 'Hide code' : 'Show code'}
