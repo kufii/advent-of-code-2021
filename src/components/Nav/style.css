@@ -1,5 +1,5 @@
 .sideNav.active {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -9,7 +9,7 @@
 }
 
 .sideNav nav {
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   right: 0;
@@ -19,6 +19,7 @@
   color: black;
   transform: translateX(100%);
   transition: all 0.2s ease;
+  z-index: var(--z-index-overlay);
 }
 
 .sideNav.active nav {

@@ -18,15 +18,13 @@ export const App = () => {
   return (
     <div id="preact_root" class={style.container}>
       <Header />
-      <div class={style.container}>
-        <Nav />
-        <div class={style.pageContainer}>
-          <Router history={history as any}>
-            <Route path="/:day?" component={ViewDay} />
-            <NotFound default />
-          </Router>
-        </div>
-      </div>
+      <Nav />
+      <main class={style.pageContainer}>
+        <Router history={history as any}>
+          <Route path="/:day?" component={ViewDay} />
+          <NotFound default />
+        </Router>
+      </main>
     </div>
   )
 }

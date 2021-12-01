@@ -2,15 +2,14 @@ import { h } from 'preact'
 import { classNames } from '/shared/web-utilities/util'
 import { setNavOpen, useStore } from '/store'
 import style from './style.css'
-import { useGlobalEvent } from '/shared/web-utilities/hooks/use-dom-event'
 
 export const Nav = () => {
   const { navOpen } = useStore()
-  useGlobalEvent('click', () => setNavOpen(false), {
-    disabled: !navOpen
-  })
   return (
-    <div class={classNames(style.sideNav, navOpen && style.active)}>
+    <div
+      onClick={() => setNavOpen(false)}
+      class={classNames(style.sideNav, navOpen && style.active)}
+    >
       <nav
         onClick={(e) => {
           e.stopImmediatePropagation()

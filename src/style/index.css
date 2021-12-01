@@ -1,15 +1,19 @@
 html,
 body {
   --color-bg: #0f0f23;
+  --color-bg-dark: #10101a;
   --color-primary: #673ab8;
   --color-primary-dark: #532e93;
   --color-text: #ccc;
+  --color-text-em: #fff;
+  --color-text-subdued: #666;
   --color-text-on-primary: #fff;
   --font-family: 'Source Code Pro', monospace;
   --font-weight-normal: 400;
   --font-weight-bold: 600;
   --z-index-front: 10;
   --z-index-overlay: 20;
+  --border-radius: 0.4rem;
   height: 100%;
   width: 100%;
   padding: 0;

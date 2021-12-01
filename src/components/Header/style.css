@@ -1,5 +1,7 @@
 .header {
   display: flex;
+  position: sticky;
+  top: 0;
   justify-content: space-between;
   align-items: center;
   color: var(--color-text-on-primary);
