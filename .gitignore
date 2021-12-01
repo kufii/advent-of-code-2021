@@ -5,3 +5,4 @@ gh-pages
 gh-pages.pub
 .cache
 size-plugin.json
+.DS_Store

@@ -1,8 +1,7 @@
-import { FunctionalComponent, h } from 'preact'
-import style from './style.css'
+import { h } from 'preact'
 
-const Home: FunctionalComponent = () => (
-  <div class={style.home}>
+const Home = () => (
+  <div>
     <h1>Home</h1>
     <p>This is the Home component.</p>
   </div>

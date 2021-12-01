@@ -1,15 +1,12 @@
 import { FunctionalComponent, h } from 'preact'
 import { Link } from 'preact-router/match'
-import style from './style.css'
 
-const Notfound: FunctionalComponent = () => (
-  <div class={style.notfound}>
+const NotFound: FunctionalComponent = () => (
+  <div>
     <h1>Error 404</h1>
     <p>That page doesn&apos;t exist.</p>
-    <Link href="/">
-      <h4>Back to Home</h4>
-    </Link>
+    <Link href="/">Back to Home</Link>
   </div>
 )
 
-export default Notfound
+export default NotFound
