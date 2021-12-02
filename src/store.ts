@@ -4,6 +4,7 @@ import * as hooks from 'preact/hooks'
 
 type Part = 1 | 2 | null
 interface State {
+  day?: number
   part: Part
   showCode: boolean
   code: string
@@ -11,6 +12,7 @@ interface State {
 }
 
 const initialState: State = {
+  day: undefined,
   part: null,
   showCode: false,
   code: '',
@@ -26,6 +28,8 @@ export const useStore = staterino({
 export const { set, get } = useStore
 
 export const resetStore = () => set(initialState)
+
+export const setDay = (day: number) => set({ day })
 
 export const setPart = (part: Part) => set({ part })
 

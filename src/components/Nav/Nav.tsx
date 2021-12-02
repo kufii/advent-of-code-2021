@@ -5,9 +5,7 @@ import style from './style.css'
 import { range } from '/solutions/util'
 
 export const Nav = () => {
-  const { navOpen } = useStore()
-  const currentDay =
-    location.hash.match(/#\/(?<day>[^/]+)/iu)?.groups?.day || '1'
+  const { navOpen, day: currentDay } = useStore()
   return (
     <div
       onClick={() => setNavOpen(false)}
@@ -23,9 +21,7 @@ export const Nav = () => {
             <li key={day}>
               <a
                 href={`#/${day}`}
-                class={classNames(
-                  day.toString() === currentDay && style.active
-                )}
+                class={classNames(day === currentDay && style.active)}
                 tabIndex={navOpen ? undefined : -1}
               >
                 Day {day}

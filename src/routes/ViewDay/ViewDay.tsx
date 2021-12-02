@@ -1,20 +1,34 @@
 import { h, Fragment } from 'preact'
 import { Button, CodeViewer, Icon, Solution } from '/components'
 import days, { Solution as SolutionType } from '/solutions'
-import { setPart, setShowCode, useStore } from '/store'
+import { setDay, setPart, setShowCode, useStore } from '/store'
 import style from './style.css'
 import NotFound from '../NotFound'
 import { newTab } from '/shared/web-utilities/util'
+import { useEffect } from 'preact/hooks'
 
 interface Props {
   day?: string
 }
 
-export const ViewDay = ({ day: dayString }: Props) => {
+const parseDay = (dayString?: string) => {
+  if (!(dayString || '').match(/^\d*$/u)) return null
   const day = Number(dayString || '1')
+  if (day < 1 || day > 25) return null
+  return day
+}
+
+export const ViewDay = ({ day: dayString }: Props) => {
+  const day = parseDay(dayString)
   const { part, showCode } = useStore()
-  if (!Number.isInteger(day) || day < 1 || day > 25) return <NotFound />
+
+  useEffect(() => {
+    if (day) setDay(day)
+  }, [day])
+
+  if (!day) return <NotFound />
   const solution = days[day - 1] as SolutionType | undefined
+
   return (
     <div class={style.container}>
       <h1>
