@@ -43,13 +43,13 @@ export const CodeViewer = ({ day }: Props) => {
   return (
     <div class={style.container}>
       {loading ? (
-        <p>Loading...</p>
+        <pre class={style.code}>Loading...</pre>
       ) : (
         <pre class={style.code} data-lang="React TSX">
           <code
             // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{
-              __html: highlight(code, languages.typescript, 'typescript')
+              __html: highlight(code, languages.tsx, 'tsx')
             }}
           />
         </pre>
