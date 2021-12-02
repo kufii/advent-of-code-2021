@@ -10,17 +10,13 @@ const parseInput = () =>
 
 export const Part1 = () => {
   const directions = parseInput()
-  const { x, depth } = directions.reduce(
-    (acc, { direction, value }) => {
-      if (direction === 'forward') acc.x += value
-      else acc.depth += value * (direction === 'up' ? -1 : 1)
-      return acc
-    },
-    {
-      x: 0,
-      depth: 0
-    }
-  )
+  let x = 0,
+    depth = 0
+  for (const { direction, value } of directions) {
+    if (direction === 'up') depth -= value
+    else if (direction === 'down') depth += value
+    else x += value
+  }
   return (
     <p>
       The horizontal position is {x} and the depth is {depth}. The final result
@@ -31,20 +27,17 @@ export const Part1 = () => {
 
 export const Part2 = () => {
   const directions = parseInput()
-  const { x, depth } = directions.reduce(
-    (acc, { direction, value }) => {
-      if (direction === 'forward') {
-        acc.x += value
-        acc.depth += value * acc.aim
-      } else acc.aim += value * (direction === 'up' ? -1 : 1)
-      return acc
-    },
-    {
-      x: 0,
-      depth: 0,
-      aim: 0
+  let x = 0,
+    depth = 0,
+    aim = 0
+  for (const { direction, value } of directions) {
+    if (direction === 'up') aim -= value
+    else if (direction === 'down') aim += value
+    else {
+      x += value
+      depth += aim * value
     }
-  )
+  }
   return (
     <p>
       The horizontal position is {x} and the depth is {depth}. The final result
