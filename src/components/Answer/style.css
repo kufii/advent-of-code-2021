@@ -1,6 +1,6 @@
 .container {
   color: var(--color-text-em);
-  text-shadow: 0 0 5px var(--color-text-em);
+  text-shadow: 0 0 5px currentColor;
   display: inline-flex;
   align-items: baseline;
   gap: 0.1rem;

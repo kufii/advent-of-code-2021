@@ -1,4 +1,4 @@
-import { h } from 'preact'
+import { h, Fragment } from 'preact'
 import { Button, CodeViewer, Icon, Solution } from '/components'
 import days, { Solution as SolutionType } from '/solutions'
 import { setPart, setShowCode, useStore } from '/store'
@@ -16,7 +16,7 @@ export const ViewDay = ({ day: dayString }: Props) => {
   if (!Number.isInteger(day) || day < 1 || day > 25) return <NotFound />
   const solution = days[day - 1] as SolutionType | undefined
   return (
-    <div>
+    <div class={style.container}>
       <h1>
         Day {day}{' '}
         <a
@@ -31,7 +31,7 @@ export const ViewDay = ({ day: dayString }: Props) => {
       {!solution?.Part1 && !solution?.Part2 ? (
         <p>Day {day} is not yet implemented</p>
       ) : (
-        <div class={style.container}>
+        <>
           <div class={style.buttons}>
             {solution?.Part1 && (
               <Button onClick={() => setPart(1)}>Part 1</Button>
@@ -47,7 +47,7 @@ export const ViewDay = ({ day: dayString }: Props) => {
           {solution && part ? (
             <Solution solution={solution} part={part} />
           ) : null}
-        </div>
+        </>
       )}
     </div>
   )
