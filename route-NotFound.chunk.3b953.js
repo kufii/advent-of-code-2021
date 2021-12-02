@@ -1,2 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[2],{F46F:function(n,t,e){"use strict";e.r(t),e.d(t,"default",(function(){return c}));var o=e("hosL"),c=function(){return Object(o.h)("div",null,Object(o.h)("h1",null,"Error 404"),Object(o.h)("p",null,"That page doesn't exist."),Object(o.h)("a",{href:"#"},"Back to Home"))}}}]);
-//# sourceMappingURL=route-NotFound.chunk.3b953.js.map
