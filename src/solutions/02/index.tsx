@@ -1,5 +1,6 @@
 import { h } from 'preact'
 import input from './input'
+import { Answer } from '/components'
 
 const parseInput = () =>
   input
@@ -20,7 +21,12 @@ export const Part1 = () => {
       depth: 0
     }
   )
-  return <p>{depth * x}</p>
+  return (
+    <p>
+      The horizontal position is {x} and the depth is {depth}. The final result
+      is <Answer>{depth * x}</Answer>.
+    </p>
+  )
 }
 
 export const Part2 = () => {
@@ -39,5 +45,10 @@ export const Part2 = () => {
       aim: 0
     }
   )
-  return <p>{depth * x}</p>
+  return (
+    <p>
+      The horizontal position is {x} and the depth is {depth}. The final result
+      is <Answer>{depth * x}</Answer>.
+    </p>
+  )
 }
