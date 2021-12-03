@@ -12,11 +12,11 @@
   position: fixed;
   top: 0;
   bottom: 0;
-  right: 0;
+  left: 0;
   width: 20rem;
   max-width: 80%;
   background-color: white;
-  transform: translateX(100%);
+  transform: translateX(-100%);
   transition: all 0.2s ease;
   overflow-y: scroll;
   z-index: var(--z-index-overlay);

@@ -1,8 +1,8 @@
 .header {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   position: sticky;
   top: 0;
-  justify-content: space-between;
   align-items: center;
   color: var(--color-text-on-primary);
   background: var(--color-primary);
@@ -11,17 +11,10 @@
 }
 
 .logo {
-  font-size: clamp(1.2rem, 1rem + 1vw, 1.5rem);
-  padding-left: 1rem;
+  font-size: clamp(1rem, 0.8rem + 1vw, 1.5rem);
+  padding-inline: 0.5rem;
   text-decoration: none;
   color: var(--color-text-on-primary);
-}
-
-.nav {
-  display: flex;
-  align-items: center;
-  height: 100%;
-  font-size: 1rem;
 }
 
 .navBtn {
