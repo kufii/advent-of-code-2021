@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "preinstall": "npx npm-force-resolutions",
-    "build": "preact build",
+    "build": "preact build --no-prerender",
     "build:gh": "GITHUB_PAGES=advent-of-code-2021 preact build --no-prerender && dot-json ./build/manifest.json start_url \"/advent-of-code-2021/\"",
     "serve": "sirv build --port 8080 --cors --single",
     "dev": "preact watch",
