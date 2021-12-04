@@ -1,25 +1,22 @@
 import { h, Fragment } from 'preact'
-import { make2dArray, range } from '../util'
+import { make2dArray } from '../util'
 import { Answer } from '/components'
 import { Bingo } from './components'
 import input from './input'
 
 const parseInput = () => {
-  const blocks = input.split('\n\n')
-  const [nums, ...boards] = blocks
+  const [nums, ...boards] = input.split('\n\n')
   return {
     nums: nums.split(',').map(Number),
     boards: boards.map((board) =>
-      board
-        .split('\n')
-        .map((line) => line.split(/ +/gu).filter(Boolean).map(Number))
+      board.split('\n').map((line) => line.split(/ +/gu).map(Number))
     )
   }
 }
 
 const isWin = (board: string[][]) =>
   board.some((line) => line.every(Boolean)) ||
-  range(0, 4).some((x) => board.every((line) => line[x]))
+  board[0].some((_, x) => board.every((line) => line[x]))
 
 const getScore = (board: number[][], marks: string[][], n: number) =>
   marks.reduce(
