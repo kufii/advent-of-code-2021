@@ -26,3 +26,7 @@ body {
   margin: 0;
   padding: 0;
 }
+
+strong {
+  text-shadow: 0 0 5px currentColor;
+}

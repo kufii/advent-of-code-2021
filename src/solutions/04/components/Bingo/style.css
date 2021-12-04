@@ -1,0 +1,6 @@
+.bingo {
+  display: inline-grid;
+  grid-template-columns: repeat(5, auto);
+  grid-template-rows: repeat(5, auto);
+  gap: 0.3rem;
+}
