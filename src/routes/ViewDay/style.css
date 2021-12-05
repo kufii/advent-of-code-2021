@@ -19,3 +19,8 @@
 .link:focus-visible {
   filter: brightness(150%);
 }
+
+.solution pre {
+  line-height: 1;
+  max-height: 80ex;
+}

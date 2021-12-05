@@ -59,7 +59,9 @@ export const ViewDay = ({ day: dayString }: Props) => {
           </div>
           <CodeViewer day={day} />
           {solution && part ? (
-            <Solution solution={solution} part={part} />
+            <div class={style.solution}>
+              <Solution solution={solution} part={part} />
+            </div>
           ) : null}
         </>
       )}
