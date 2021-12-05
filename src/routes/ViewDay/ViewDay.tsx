@@ -4,7 +4,6 @@ import { Button, CodeViewer, Icon, Solution } from '/components'
 import days, { Solution as SolutionType } from '/solutions'
 import { setDay, setPart, useStore } from '/store'
 import NotFound from '../NotFound'
-import { newTab } from '/shared/web-utilities/util'
 import { ShowCodeButton } from './components'
 import style from './style.css'
 
@@ -34,14 +33,15 @@ export const ViewDay = ({ day: dayString }: Props) => {
     <div class={style.container}>
       <h1>
         Day {day}{' '}
-        <a
-          class={style.link}
+        <Button
           href={`https://adventofcode.com/2021/day/${day}`}
-          {...newTab}
+          openInNewTab
+          plain
+          compact
           aria-label="open advent of code problem"
         >
           <Icon name="external-link" />
-        </a>
+        </Button>
       </h1>
       {!solution?.Part1 && !solution?.Part2 ? (
         <p>Day {day} is not yet implemented</p>

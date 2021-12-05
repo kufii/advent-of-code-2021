@@ -6,10 +6,19 @@ import 'prismjs/components/prism-jsx'
 import 'prismjs/components/prism-tsx'
 import { setCode, useStore } from '/store'
 import style from './style.css'
+import { Button } from '../Button'
+import { Icon } from '..'
 
 interface Props {
   day: number
 }
+
+const getUrl = (day: number, purge?: boolean) =>
+  `https://${
+    purge ? 'purge' : 'cdn'
+  }.jsdelivr.net/gh/kufii/advent-of-code-2021@main/src/solutions/${day
+    .toString()
+    .padStart(2, '0')}/index.tsx`
 
 export const CodeViewer = ({ day }: Props) => {
   const [showCode, code] = useStore([(s) => s.showCode, (s) => s.code])
@@ -20,11 +29,7 @@ export const CodeViewer = ({ day }: Props) => {
     const loadCode = async () => {
       setLoading(true)
       try {
-        const response = await fetch(
-          `https://cdn.jsdelivr.net/gh/kufii/advent-of-code-2021@main/src/solutions/${day
-            .toString()
-            .padStart(2, '0')}/index.tsx`
-        )
+        const response = await fetch(getUrl(day))
         const text = await response.text()
         setCode(text)
       } catch (err) {
@@ -46,6 +51,19 @@ export const CodeViewer = ({ day }: Props) => {
         <pre class={style.code}>Loading...</pre>
       ) : (
         <pre class={style.code} data-lang="React TSX">
+          {process.env.NODE_ENV === 'development' && (
+            <div>
+              <Button
+                href={getUrl(day, true)}
+                openInNewTab
+                plain
+                compact
+                ariaLabel="purge jsdelivr cache"
+              >
+                <Icon name="trash-2" />
+              </Button>
+            </div>
+          )}
           <code
             // eslint-disable-next-line react/no-danger
             dangerouslySetInnerHTML={{

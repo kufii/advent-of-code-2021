@@ -1,5 +1,5 @@
 import { h } from 'preact'
-import { classNames } from '/shared/web-utilities/util'
+import { classNames, newTab } from '/shared/web-utilities/util'
 import style from './style.css'
 
 interface Props {
@@ -7,7 +7,9 @@ interface Props {
   plain?: boolean
   compact?: boolean
   ariaLabel?: string
-  onClick(): void
+  onClick?(): void
+  href?: string
+  openInNewTab?: boolean
   children: JSX.Element | string
 }
 
@@ -17,18 +19,25 @@ export const Button = ({
   compact,
   ariaLabel,
   onClick,
+  href,
+  openInNewTab,
   children
-}: Props) => (
-  <button
-    class={classNames(
+}: Props) => {
+  const props = {
+    class: classNames(
       style.button,
       primary && style.primary,
       plain && style.plain,
       compact && style.compact
-    )}
-    onClick={onClick}
-    aria-label={ariaLabel}
-  >
-    {children}
-  </button>
-)
+    ),
+    onClick,
+    href,
+    'aria-label': ariaLabel,
+    ...(openInNewTab && newTab)
+  }
+  return href ? (
+    <a {...props}>{children}</a>
+  ) : (
+    <button {...props}>{children}</button>
+  )
+}

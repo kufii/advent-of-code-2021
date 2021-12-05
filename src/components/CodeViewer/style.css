@@ -24,4 +24,5 @@
   font-family: 'Operator Mono Ssm Lig', 'Operator Mono Lig', 'Operator Mono Ssm',
     'Operator Mono', var(--font-family);
   font-size: 0.9rem;
+  font-weight: var(--font-weight-book);
 }
