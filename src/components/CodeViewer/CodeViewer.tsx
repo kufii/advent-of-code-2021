@@ -46,7 +46,7 @@ export const CodeViewer = ({ day }: Props) => {
   const refreshCode = async () => {
     try {
       setLoading(true)
-      await fetch(getUrl(day, true))
+      await fetch(getUrl(day, true), { cache: 'no-cache' })
       setCode('')
     } catch (err) {
       // eslint-disable-next-line no-console
