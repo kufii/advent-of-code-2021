@@ -657,6 +657,7 @@ body {
   --color-text-on-primary: #fff;
   --font-family: 'Source Code Pro', monospace;
   --font-weight-normal: 400;
+  --font-weight-book: 500;
   --font-weight-bold: 600;
   --z-index-front: 10;
   --z-index-overlay: 20;
@@ -876,6 +877,7 @@ strong {
   font-family: 'Operator Mono Ssm Lig', 'Operator Mono Lig', 'Operator Mono Ssm',
     'Operator Mono', var(--font-family);
   font-size: 0.9rem;
+  font-weight: var(--font-weight-book);
 }
 
 .container__Vv0uF {
@@ -917,11 +919,6 @@ strong {
   gap: 0.5rem;
 }
 
-.link__50L66 {
-  color: var(--color-primary);
-  text-decoration: none;
-}
-
 .link__50L66:hover,
 .link__50L66:active,
 .link__50L66:focus-visible {
@@ -944,4 +941,4 @@ strong {
 }
 
 
-/*# sourceMappingURL=ssr-bundle.31cab.css.map*/
+/*# sourceMappingURL=ssr-bundle.138f8.css.map*/
