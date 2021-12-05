@@ -22,14 +22,14 @@ const parseInput = () =>
     }))
 
 const iterateLine = function* (start: Point, end: Point) {
-  const [deltaX, deltaY] = [end.x - start.x, end.y - start.y].map(
+  const [dx, dy] = [end.x - start.x, end.y - start.y].map(
     (n) => n && n / Math.abs(n)
   )
-  yield start
-  let { x, y } = start
-  while (x !== end.x || y !== end.y) {
-    x += deltaX
-    y += deltaY
+  for (
+    let x = start.x, y = start.y;
+    x !== end.x + dx || y !== end.y + dy;
+    x += dx, y += dy
+  ) {
     yield { x, y }
   }
 }
