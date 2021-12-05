@@ -35,13 +35,27 @@ export const CodeViewer = ({ day }: Props) => {
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err)
-        setCode('Not Found')
+        setCode('Not found')
       } finally {
         setLoading(false)
       }
     }
     loadCode()
   }, [day, code, showCode])
+
+  const refreshCode = async () => {
+    try {
+      setLoading(true)
+      await fetch(getUrl(day, true))
+      setCode('')
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err)
+      setCode('Refresh failed')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   if (!showCode) return null
 
@@ -54,13 +68,12 @@ export const CodeViewer = ({ day }: Props) => {
           {process.env.NODE_ENV === 'development' && (
             <div>
               <Button
-                href={getUrl(day, true)}
-                openInNewTab
+                onClick={refreshCode}
                 plain
                 compact
-                ariaLabel="purge jsdelivr cache"
+                ariaLabel="purge jsdelivr cache and reload code"
               >
-                <Icon name="trash-2" />
+                <Icon name="refresh-cw" />
               </Button>
             </div>
           )}
