@@ -1,6 +1,7 @@
 import { h, Fragment } from 'preact'
 import { Answer } from '/components'
-import { InfiniteGrid, output2dArray, Point } from '../util'
+import { InfiniteGrid, Point } from '../util'
+import { Visualize } from './components'
 import input from './input'
 
 interface Line {
@@ -52,20 +53,6 @@ const getIntersections = (grid: InfiniteGrid<number>) =>
         acc + line.reduce((acc, cell) => acc + (cell > 1 ? 1 : 0), 0),
       0
     )
-
-const Visualize = ({ grid }: { grid: InfiniteGrid<number> }) => (
-  <pre>
-    {output2dArray(
-      grid
-        .toArray()
-        .map((line) =>
-          line.map((cell) =>
-            cell > 2 ? '▓' : cell === 2 ? '▒' : cell === 1 ? '░' : ' '
-          )
-        )
-    )}
-  </pre>
-)
 
 export const Part1 = () => {
   const lines = parseInput().filter(
