@@ -1,12 +1,12 @@
 import { h, Fragment } from 'preact'
+import { useEffect } from 'preact/hooks'
 import { Button, CodeViewer, Icon, Solution } from '/components'
 import days, { Solution as SolutionType } from '/solutions'
 import { setDay, setPart, useStore } from '/store'
-import style from './style.css'
 import NotFound from '../NotFound'
 import { newTab } from '/shared/web-utilities/util'
-import { useEffect } from 'preact/hooks'
-import { ShowCodeButton } from './components/ShowCodeButton/ShowCodeButton'
+import { ShowCodeButton } from './components'
+import style from './style.css'
 
 interface Props {
   day?: string
