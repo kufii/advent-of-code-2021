@@ -46,13 +46,7 @@ const drawLines = (lines: Line[]) => {
 }
 
 const getIntersections = (grid: InfiniteGrid<number>) =>
-  grid
-    .toArray()
-    .reduce(
-      (acc, line) =>
-        acc + line.reduce((acc, cell) => acc + (cell > 1 ? 1 : 0), 0),
-      0
-    )
+  grid.cells.filter((cell) => cell.value > 1).length
 
 export const Part1 = () => {
   const lines = parseInput().filter(
