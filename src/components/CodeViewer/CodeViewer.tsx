@@ -29,7 +29,7 @@ export const CodeViewer = ({ day }: Props) => {
     const loadCode = async () => {
       setLoading(true)
       try {
-        const response = await fetch(getUrl(day))
+        const response = await fetch(getUrl(day), { cache: 'no-cache' })
         const text = await response.text()
         setCode(text)
       } catch (err) {
