@@ -1,11 +1,12 @@
 import { h, Fragment } from 'preact'
 import { Button, CodeViewer, Icon, Solution } from '/components'
 import days, { Solution as SolutionType } from '/solutions'
-import { setDay, setPart, setShowCode, useStore } from '/store'
+import { setDay, setPart, useStore } from '/store'
 import style from './style.css'
 import NotFound from '../NotFound'
 import { newTab } from '/shared/web-utilities/util'
 import { useEffect } from 'preact/hooks'
+import { ShowCodeButton } from './components/ShowCodeButton/ShowCodeButton'
 
 interface Props {
   day?: string
@@ -20,7 +21,7 @@ const parseDay = (dayString?: string) => {
 
 export const ViewDay = ({ day: dayString }: Props) => {
   const day = parseDay(dayString)
-  const { part, showCode } = useStore()
+  const part = useStore((s) => s.part)
 
   useEffect(() => {
     if (day) setDay(day)
@@ -53,9 +54,7 @@ export const ViewDay = ({ day: dayString }: Props) => {
             {solution?.Part2 && (
               <Button onClick={() => setPart(2)}>Part 2</Button>
             )}
-            <Button onClick={() => setShowCode(!showCode)} plain>
-              {showCode ? 'Hide code' : 'Show code'}
-            </Button>
+            <ShowCodeButton />
           </div>
           <CodeViewer day={day} />
           {solution && part ? (

@@ -5,7 +5,7 @@ import style from './style.css'
 import { range } from '/solutions/util'
 
 export const Nav = () => {
-  const { navOpen, day: currentDay } = useStore()
+  const [navOpen, day] = useStore([(s) => s.navOpen, (s) => s.day])
   return (
     <div
       onClick={() => setNavOpen(false)}
@@ -17,14 +17,14 @@ export const Nav = () => {
         }}
       >
         <ul>
-          {range(1, 25).map((day) => (
-            <li key={day}>
+          {range(1, 25).map((d) => (
+            <li key={d}>
               <a
-                href={`#/${day}`}
-                class={classNames(day === currentDay && style.active)}
+                href={`#/${d}`}
+                class={classNames(d === day && style.active)}
                 tabIndex={navOpen ? undefined : -1}
               >
-                Day {day}
+                Day {d}
               </a>
             </li>
           ))}

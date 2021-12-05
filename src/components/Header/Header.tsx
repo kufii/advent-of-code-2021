@@ -5,7 +5,7 @@ import { newTab } from '/shared/web-utilities/util'
 import style from './style.css'
 
 export const Header = () => {
-  const { navOpen } = useStore()
+  const navOpen = useStore((s) => s.navOpen)
   return (
     <header class={style.header}>
       <button
