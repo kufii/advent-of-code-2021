@@ -901,7 +901,7 @@ strong {
 }
 
 .container__gS\+Fo {
-  font-size: 0.3rem;
+  font-size: 0.5rem;
   max-height: 40rem;
 }
 
@@ -926,7 +926,8 @@ strong {
 }
 
 .solution__iuEX0 pre {
-  line-height: 1;
+  line-height: 1.37;
+  font-family: var(--font-family);
 }
 
 .container__5J6y7 {
@@ -941,4 +942,4 @@ strong {
 }
 
 
-/*# sourceMappingURL=ssr-bundle.138f8.css.map*/
+/*# sourceMappingURL=ssr-bundle.d8481.css.map*/
