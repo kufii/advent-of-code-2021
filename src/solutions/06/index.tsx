@@ -9,10 +9,9 @@ const simulateFish = (fish: number[], days: number) => {
   const map = new Map(
     range(0, 8).map((n) => [n, fish.filter((timer) => timer === n).length])
   )
-  const getCycle = (n: number) => n % 9
   nTimes(days, (n) => {
-    const addTo = getCycle(n + 7)
-    map.set(addTo, map.get(addTo)! + map.get(getCycle(n))!)
+    const addTo = (n + 7) % map.size
+    map.set(addTo, map.get(addTo)! + map.get(n % map.size)!)
   })
   return [...map.values()].reduce(sum)
 }
