@@ -87,3 +87,9 @@ export class InfiniteGrid<T> {
     return newGrid
   }
 }
+
+export const nTimes = (n: number, cb: () => unknown) => {
+  for (let i = 0; i < n; i++) cb()
+}
+
+export const sum = (a: number, b: number) => a + b
