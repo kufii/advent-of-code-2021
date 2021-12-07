@@ -5,13 +5,7 @@ import { Answer } from '/components'
 
 const parseInput = () => input.split(',').map(Number)
 
-const nthTriangular = (num: number) => {
-  let result = 0
-  for (let n = 1; n <= num; n++) {
-    result += n
-  }
-  return result
-}
+const nthTriangular = (n: number) => (Math.pow(n, 2) + n) / 2
 
 const getAlignment = (
   crabs: number[],
