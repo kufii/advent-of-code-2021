@@ -20,6 +20,16 @@ export const fastMax = (arr: number[]) =>
 export const fastMin = (arr: number[]) =>
   arr.reduce((min, v) => (min <= v ? min : v), Infinity)
 
+export const maxBy =
+  <T>(cb: (item: T) => number) =>
+  (a: T, b: T) =>
+    cb(b) > cb(a) ? b : a
+
+export const minBy =
+  <T>(cb: (item: T) => number) =>
+  (a: T, b: T) =>
+    cb(b) < cb(a) ? b : a
+
 export interface Point {
   x: number
   y: number
