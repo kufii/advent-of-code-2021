@@ -1,5 +1,5 @@
 import { h } from 'preact'
-import { fastMax, fastMin, minBy, range, sum } from '../util'
+import { min, max, minBy, range, sum } from '../util'
 import input from './input'
 import { Answer } from '/components'
 
@@ -11,7 +11,7 @@ const getAlignment = (
   crabs: number[],
   fuelCb: (source: number, target: number) => number
 ) =>
-  range(fastMin(crabs), fastMax(crabs))
+  range(crabs.reduce(min), crabs.reduce(max))
     .map((n) => [crabs.map((pos) => fuelCb(pos, n)).reduce(sum), n])
     .reduce(minBy(([result]) => result))
 

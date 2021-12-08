@@ -14,11 +14,9 @@ export const make2dArray = <T>(ySize: number, xSize: number, fill: T): T[][] =>
 export const output2dArray = (arr: (string | number)[][]) =>
   arr.map((line) => line.join('')).join('\n')
 
-export const fastMax = (arr: number[]) =>
-  arr.reduce((max, v) => (max >= v ? max : v), -Infinity)
+export const max = (a: number, b: number) => (b > a ? b : a)
 
-export const fastMin = (arr: number[]) =>
-  arr.reduce((min, v) => (min <= v ? min : v), Infinity)
+export const min = (a: number, b: number) => (b < a ? b : a)
 
 export const maxBy =
   <T>(cb: (item: T) => number) =>
@@ -54,12 +52,12 @@ export class InfiniteGrid<T> {
     const cells = this.cells
     return {
       min: {
-        x: fastMin(cells.map(({ x }) => x)),
-        y: fastMin(cells.map(({ y }) => y))
+        x: cells.map(({ x }) => x).reduce(min),
+        y: cells.map(({ y }) => y).reduce(min)
       },
       max: {
-        x: fastMax(cells.map(({ x }) => x)),
-        y: fastMax(cells.map(({ y }) => y))
+        x: cells.map(({ x }) => x).reduce(max),
+        y: cells.map(({ y }) => y).reduce(min)
       }
     }
   }
