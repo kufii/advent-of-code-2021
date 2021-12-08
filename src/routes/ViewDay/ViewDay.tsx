@@ -35,8 +35,8 @@ export const ViewDay = ({ day: dayString }: Props) => {
       <h1>
         Day {day}{' '}
         <Button
-          href={`https://adventofcode.com/2021/day/${day}`}
-          openInNewTab
+          url={`https://adventofcode.com/2021/day/${day}`}
+          external
           plain
           compact
           aria-label="open advent of code problem"
@@ -67,7 +67,7 @@ export const ViewDay = ({ day: dayString }: Props) => {
       )}
       <div class={classNames(style.buttons, style.navButtons)}>
         <Button
-          href={`#/${day - 1}`}
+          url={`#/${day - 1}`}
           plain
           disabled={day <= 1}
           ariaLabel="Next day"
@@ -75,7 +75,7 @@ export const ViewDay = ({ day: dayString }: Props) => {
           <Icon name="chevron-left" />
         </Button>
         <Button
-          href={`#/${day + 1}`}
+          url={`#/${day + 1}`}
           plain
           disabled={day >= 25}
           ariaLabel="Previous day"

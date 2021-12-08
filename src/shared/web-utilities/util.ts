@@ -1,3 +1,5 @@
+import { Falsy } from 'mergerino'
+
 type TimeoutRef = { current?: number }
 type AFunc = (...args: any[]) => void
 
@@ -28,7 +30,7 @@ export const throttle = <T extends AFunc>(
   return throttled
 }
 
-export const classNames = (...classNames: (string | boolean | undefined)[]) =>
+export const classNames = (...classNames: (string | Falsy)[]) =>
   classNames.filter(Boolean).join(' ')
 
 export const newTab = { target: '_blank', rel: 'noopener noreferrer' }
