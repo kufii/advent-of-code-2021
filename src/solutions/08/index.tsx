@@ -14,30 +14,36 @@ const parseInput = () =>
 
 const decodeWiring = (digits: string[]) => {
   digits = digits.map((str) => sortStr(str))
-  const map: Record<number, string> = { 8: 'abcdefg' }
-  const addToMap = (
-    n: number,
-    length: number,
-    includes?: [number] | [number, number]
-  ) =>
-    (map[n] = digits.find(
-      (str) =>
-        !Object.values(map).includes(str) &&
-        str.length === length &&
-        (!includes ||
-          [...str].filter((c) => map[includes[0]].includes(c)).length ===
-            (includes[1] ?? map[includes[0]].length))
-    )!)
+  const map = new Map<string, number>()
+
+  const strIncludes = (str: string, n: number, length?: number) => {
+    const [key] = [...map.entries()].find(([, value]) => value === n)!
+    return (
+      [...key].filter((c) => str.includes(c)).length === (length ?? key.length)
+    )
+  }
+  const addToMap = (n: number, length: number, includes?: [number, number?]) =>
+    map.set(
+      digits.find(
+        (str) =>
+          !map.has(str) &&
+          str.length === length &&
+          (!includes || strIncludes(str, ...includes))
+      )!,
+      n
+    )
+
   addToMap(1, 2)
   addToMap(4, 4)
   addToMap(7, 3)
+  addToMap(8, 7)
   addToMap(3, 5, [7])
   addToMap(5, 5, [4, 3])
   addToMap(2, 5)
   addToMap(9, 6, [3])
   addToMap(6, 6, [5])
   addToMap(0, 6)
-  return new Map(Object.entries(map).map(([n, wiring]) => [wiring, n]))
+  return map
 }
 
 export const Part1 = () => {
