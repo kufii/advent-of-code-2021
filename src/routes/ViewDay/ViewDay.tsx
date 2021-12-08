@@ -39,7 +39,7 @@ export const ViewDay = ({ day: dayString }: Props) => {
           external
           plain
           compact
-          aria-label="open advent of code problem"
+          ariaLabel="open advent of code problem"
         >
           <Icon name="external-link" />
         </Button>
