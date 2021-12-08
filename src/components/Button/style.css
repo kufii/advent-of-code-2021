@@ -1,6 +1,6 @@
 .button {
   color: var(--color-primary);
-  background: var(--color-bg);
+  background: none;
   border: 0.1em solid var(--color-primary);
   padding: 0.4em 0.8em;
   border-radius: 2rem;
@@ -14,7 +14,6 @@
 
 .button[disabled] {
   filter: grayscale(100%);
-  background: none;
   cursor: default;
 }
 

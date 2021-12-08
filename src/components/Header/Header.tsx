@@ -18,9 +18,11 @@ export const Header = () => {
       >
         <Icon name="menu" />
       </button>
-      <a class={style.logo} href="#/">
-        advent of code 2021
-      </a>
+      <span>
+        <a class={style.logo} href="#/">
+          advent of code 2021
+        </a>
+      </span>
       <a
         class={style.navBtn}
         href="https://github.com/kufii/advent-of-code-2021"
