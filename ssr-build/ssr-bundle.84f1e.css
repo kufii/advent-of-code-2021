@@ -707,8 +707,14 @@ strong {
   cursor: pointer;
 }
 
-.button__TEQZf:hover,
-.button__TEQZf:focus-visible {
+.button__TEQZf[disabled] {
+  filter: grayscale(100%);
+  background: none;
+  cursor: default;
+}
+
+.button__TEQZf:not([disabled]):hover,
+.button__TEQZf:not([disabled]):focus-visible {
   filter: brightness(150%);
 }
 
@@ -919,6 +925,11 @@ strong {
   gap: 0.5rem;
 }
 
+.navButtons__94ceW {
+  -ms-flex-pack: center;
+      justify-content: center;
+}
+
 .link__50L66:hover,
 .link__50L66:active,
 .link__50L66:focus-visible {
@@ -942,4 +953,4 @@ strong {
 }
 
 
-/*# sourceMappingURL=ssr-bundle.d8481.css.map*/
+/*# sourceMappingURL=ssr-bundle.84f1e.css.map*/
