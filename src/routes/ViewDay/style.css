@@ -9,6 +9,10 @@
   gap: 0.5rem;
 }
 
+.navButtons {
+  justify-content: center;
+}
+
 .link:hover,
 .link:active,
 .link:focus-visible {

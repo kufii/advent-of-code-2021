@@ -6,6 +6,7 @@ import { setDay, setPart, useStore } from '/store'
 import NotFound from '../NotFound'
 import { ShowCodeButton } from './components'
 import style from './style.css'
+import { classNames } from '/shared/web-utilities/util'
 
 interface Props {
   day?: string
@@ -64,6 +65,24 @@ export const ViewDay = ({ day: dayString }: Props) => {
           ) : null}
         </>
       )}
+      <div class={classNames(style.buttons, style.navButtons)}>
+        <Button
+          href={`#/${day - 1}`}
+          plain
+          disabled={day <= 1}
+          ariaLabel="Next day"
+        >
+          <Icon name="chevron-left" />
+        </Button>
+        <Button
+          href={`#/${day + 1}`}
+          plain
+          disabled={day >= 25}
+          ariaLabel="Previous day"
+        >
+          <Icon name="chevron-right" />
+        </Button>
+      </div>
     </div>
   )
 }
