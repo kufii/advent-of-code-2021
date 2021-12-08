@@ -70,7 +70,7 @@ export const ViewDay = ({ day: dayString }: Props) => {
           url={`#/${day - 1}`}
           plain
           disabled={day <= 1}
-          ariaLabel="Next day"
+          ariaLabel="Previous day"
         >
           <Icon name="chevron-left" />
         </Button>
@@ -78,7 +78,7 @@ export const ViewDay = ({ day: dayString }: Props) => {
           url={`#/${day + 1}`}
           plain
           disabled={day >= 25}
-          ariaLabel="Previous day"
+          ariaLabel="Next day"
         >
           <Icon name="chevron-right" />
         </Button>
