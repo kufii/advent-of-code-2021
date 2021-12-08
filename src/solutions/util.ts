@@ -101,3 +101,7 @@ export const nTimes = (n: number, cb: (n: number) => unknown) => {
 }
 
 export const sum = (a: number, b: number) => a + b
+
+export const alphaSort = (a: string, b: string) => a.localeCompare(b)
+
+export const sortStr = (str: string) => [...str].sort(alphaSort).join('')
