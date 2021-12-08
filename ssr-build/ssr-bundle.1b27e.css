@@ -695,7 +695,7 @@ strong {
 
 .button__TEQZf {
   color: var(--color-primary);
-  background: var(--color-bg);
+  background: none;
   border: 0.1em solid var(--color-primary);
   padding: 0.4em 0.8em;
   border-radius: 2rem;
@@ -709,7 +709,6 @@ strong {
 
 .button__TEQZf[disabled] {
   filter: grayscale(100%);
-  background: none;
   cursor: default;
 }
 
@@ -953,4 +952,4 @@ strong {
 }
 
 
-/*# sourceMappingURL=ssr-bundle.84f1e.css.map*/
+/*# sourceMappingURL=ssr-bundle.1b27e.css.map*/
