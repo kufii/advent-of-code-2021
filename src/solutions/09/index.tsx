@@ -30,7 +30,7 @@ const getLowPoints = function* (map: number[][]) {
   }
 }
 
-const getBasins = (arr: number[][], point: Point) => {
+const getBasin = (arr: number[][], point: Point) => {
   const basin = new Set<string>()
   const recursive = (point: Point) => {
     basin.add(pointToKey(point))
@@ -62,7 +62,7 @@ export const Part1 = () => {
 
 export const Part2 = () => {
   const map = parseInput()
-  const basins = [...getLowPoints(map)].map((point) => getBasins(map, point))
+  const basins = [...getLowPoints(map)].map((point) => getBasin(map, point))
   const largestBasins = basins
     .map((basin) => basin.size)
     .sort(sortNum)
