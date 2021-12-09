@@ -33,6 +33,7 @@ export interface Point {
   y: number
 }
 
+export const pointToKey = ({ x, y }: Point) => `${x},${y}`
 export class InfiniteGrid<T> {
   fill: T
   grid: Map<string, T>
@@ -75,17 +76,13 @@ export class InfiniteGrid<T> {
     return array
   }
 
-  key(x: number, y: number) {
-    return `${x},${y}`
-  }
-
   set(x: number, y: number, value: T) {
-    this.grid.set(this.key(x, y), value)
+    this.grid.set(pointToKey({ x, y }), value)
   }
 
   get(x: number, y: number) {
-    return this.grid.has(this.key(x, y))
-      ? this.grid.get(this.key(x, y))!
+    return this.grid.has(pointToKey({ x, y }))
+      ? this.grid.get(pointToKey({ x, y }))!
       : this.fill
   }
 
@@ -102,6 +99,13 @@ export const nTimes = (n: number, cb: (n: number) => unknown) => {
 
 export const sum = (a: number, b: number) => a + b
 
+export const product = (a: number, b: number) => a * b
+
 export const alphaSort = (a: string, b: string) => a.localeCompare(b)
 
 export const sortStr = (str: string) => [...str].sort(alphaSort).join('')
+
+export const sortNum = (a: number, b: number) => a - b
+
+export const parse2dArray = <T>(str: string, cbMap: (c: string) => T) =>
+  str.split('\n').map((line) => [...line].map(cbMap))
