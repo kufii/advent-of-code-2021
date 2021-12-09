@@ -1,4 +1,7 @@
 .button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   color: var(--color-primary);
   background: none;
   border: 0.1em solid var(--color-primary);
