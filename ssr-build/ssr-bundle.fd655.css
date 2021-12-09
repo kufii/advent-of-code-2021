@@ -694,6 +694,11 @@ strong {
 }
 
 .button__TEQZf {
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -ms-flex-align: center;
+      align-items: center;
+  gap: 0.5rem;
   color: var(--color-primary);
   background: none;
   border: 0.1em solid var(--color-primary);
@@ -953,4 +958,4 @@ strong {
 }
 
 
-/*# sourceMappingURL=ssr-bundle.71b2f.css.map*/
+/*# sourceMappingURL=ssr-bundle.fd655.css.map*/
