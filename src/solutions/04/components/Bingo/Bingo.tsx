@@ -1,4 +1,5 @@
 import { h, Fragment } from 'preact'
+import { Visualization } from '/components'
 import style from './style.css'
 
 interface Props {
@@ -7,7 +8,7 @@ interface Props {
 }
 
 export const Bingo = ({ board, marks }: Props) => (
-  <div>
+  <Visualization>
     <div class={style.bingo}>
       {board.map((line, y) => (
         <Fragment key={y}>
@@ -17,5 +18,5 @@ export const Bingo = ({ board, marks }: Props) => (
         </Fragment>
       ))}
     </div>
-  </div>
+  </Visualization>
 )

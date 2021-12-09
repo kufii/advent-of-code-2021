@@ -1,4 +1,5 @@
 import { h, Fragment } from 'preact'
+import { Visualization } from '/components'
 import { pointToKey } from '/solutions/util'
 
 interface Props {
@@ -7,7 +8,7 @@ interface Props {
 }
 
 export const Visualize = ({ map, highlightCoords }: Props) => (
-  <pre>
+  <Visualization>
     {map.map((line, y) => (
       <Fragment key={`y=${y}`}>
         {line.map((cell, x) =>
@@ -20,5 +21,5 @@ export const Visualize = ({ map, highlightCoords }: Props) => (
         <br />
       </Fragment>
     ))}
-  </pre>
+  </Visualization>
 )

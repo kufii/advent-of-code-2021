@@ -1,5 +1,6 @@
 import { h } from 'preact'
 import { InfiniteGrid, output2dArray } from '/solutions/util'
+import { Visualization } from '/components'
 import style from './style.css'
 
 interface Props {
@@ -7,7 +8,7 @@ interface Props {
 }
 
 export const Visualize = ({ grid }: Props) => (
-  <pre class={style.container}>
+  <Visualization class={style.container}>
     {output2dArray(
       grid
         .toArray()
@@ -17,5 +18,5 @@ export const Visualize = ({ grid }: Props) => (
           )
         )
     )}
-  </pre>
+  </Visualization>
 )
