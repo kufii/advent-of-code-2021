@@ -6,20 +6,23 @@ import { Visualize } from './components'
 
 const parseInput = () => parse2dArray(input, Number)
 
-const getAdjacent = function* (map: number[][], { x, y }: Point) {
-  if (x > 0) yield { x: x - 1, y }
-  if (x < map[y].length - 1) yield { x: x + 1, y }
-  if (y > 0) yield { x, y: y - 1 }
-  if (y < map.length - 1) yield { x, y: y + 1 }
-}
+const getAdjacent = (map: number[][], { x, y }: Point) =>
+  [
+    [-1, 0],
+    [1, 0],
+    [0, -1],
+    [0, 1]
+  ]
+    .map(([dx, dy]) => ({ x: x + dx, y: y + dy }))
+    .filter(
+      ({ x, y }) => x >= 0 && y >= 0 && y < map.length && x < map[y].length
+    )
 
 const getLowPoints = function* (map: number[][]) {
   for (let y = 0; y < map.length; y++) {
     for (let x = 0; x < map[y].length; x++) {
       if (
-        [...getAdjacent(map, { x, y })].every(
-          (pos) => map[y][x] < map[pos.y][pos.x]
-        )
+        getAdjacent(map, { x, y }).every((pos) => map[y][x] < map[pos.y][pos.x])
       ) {
         yield { x, y }
       }
@@ -31,7 +34,7 @@ const getBasins = (arr: number[][], point: Point) => {
   const basin = new Set<string>()
   const recursive = (point: Point) => {
     basin.add(pointToKey(point))
-    ;[...getAdjacent(arr, point)]
+    getAdjacent(arr, point)
       .filter(({ x, y }) => arr[y][x] < 9 && arr[y][x] > arr[point.y][point.x])
       .forEach(recursive)
   }
