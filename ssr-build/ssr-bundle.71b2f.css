@@ -885,6 +885,12 @@ strong {
   font-weight: var(--font-weight-book);
 }
 
+.container__BSVbi {
+  line-height: 1.37;
+  font-family: var(--font-family);
+  max-height: 40rem;
+}
+
 .container__Vv0uF {
   display: -ms-flexbox;
   display: flex;
@@ -903,6 +909,7 @@ strong {
   grid-template-columns: repeat(5, auto);
   grid-template-rows: repeat(5, auto);
   gap: 0.3rem;
+  place-items: center;
 }
 
 .container__gS\+Fo {
@@ -934,12 +941,6 @@ strong {
   filter: brightness(150%);
 }
 
-.solution__iuEX0 pre {
-  line-height: 1.37;
-  font-family: var(--font-family);
-  max-height: 40rem;
-}
-
 .container__5J6y7 {
   height: 100vh;
   overflow-x: hidden;
@@ -952,4 +953,4 @@ strong {
 }
 
 
-/*# sourceMappingURL=ssr-bundle.7ff6a.css.map*/
+/*# sourceMappingURL=ssr-bundle.71b2f.css.map*/
