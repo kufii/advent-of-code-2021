@@ -907,7 +907,6 @@ strong {
 
 .container__gS\+Fo {
   font-size: 0.5rem;
-  max-height: 40rem;
 }
 
 .container__PVQVi {
@@ -938,6 +937,7 @@ strong {
 .solution__iuEX0 pre {
   line-height: 1.37;
   font-family: var(--font-family);
+  max-height: 40rem;
 }
 
 .container__5J6y7 {
@@ -952,4 +952,4 @@ strong {
 }
 
 
-/*# sourceMappingURL=ssr-bundle.1b27e.css.map*/
+/*# sourceMappingURL=ssr-bundle.7ff6a.css.map*/
