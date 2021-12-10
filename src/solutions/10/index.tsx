@@ -15,7 +15,7 @@ const brackets: Record<string, string> = {
 const validate = (str: string) => {
   const stack: string[] = []
   for (const c of str) {
-    if (Object.keys(brackets).includes(c)) {
+    if (brackets[c]) {
       stack.push(c)
     } else {
       const last = stack.pop()
