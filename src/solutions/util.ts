@@ -1,3 +1,10 @@
+export type Truthy<T> = T extends false | '' | 0 | null | undefined ? never : T
+
+export const truthy = <T>(value: T): value is Truthy<T> => Boolean(value)
+
+export const nonNullable = <T>(value: T): value is NonNullable<T> =>
+  value != null
+
 export const range = (start: number, end: number) => {
   const arr = []
   for (let n = start; n <= end; n++) {
