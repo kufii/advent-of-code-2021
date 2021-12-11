@@ -41,6 +41,37 @@ export interface Point {
 }
 
 export const pointToKey = ({ x, y }: Point) => `${x},${y}`
+
+export const getAdjacent = (map: any[][], { x, y }: Point, diagonal = false) =>
+  [
+    [-1, 0],
+    [1, 0],
+    [0, -1],
+    [0, 1],
+    ...(diagonal
+      ? [
+          [-1, -1],
+          [-1, 1],
+          [1, -1],
+          [1, 1]
+        ]
+      : [])
+  ]
+    .map(([dx, dy]) => ({ x: x + dx, y: y + dy }))
+    .filter(
+      ({ x, y }) => x >= 0 && y >= 0 && y < map.length && x < map[y].length
+    )
+
+export const parse2dArray = <T>(str: string, cbMap: (c: string) => T) =>
+  str.split('\n').map((line) => [...line].map(cbMap))
+
+export const iterate2dArray = function* <T>(map: T[][]) {
+  for (let y = 0; y < map.length; y++) {
+    for (let x = 0; x < map[y].length; x++) {
+      yield { x, y, value: map[y][x] }
+    }
+  }
+}
 export class InfiniteGrid<T> {
   fill: T
   grid: Map<string, T>
@@ -113,6 +144,3 @@ export const alphaSort = (a: string, b: string) => a.localeCompare(b)
 export const sortStr = (str: string) => [...str].sort(alphaSort).join('')
 
 export const sortNum = (a: number, b: number) => a - b
-
-export const parse2dArray = <T>(str: string, cbMap: (c: string) => T) =>
-  str.split('\n').map((line) => [...line].map(cbMap))

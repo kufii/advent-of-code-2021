@@ -1,31 +1,24 @@
 import { h, Fragment } from 'preact'
 import { Answer } from '/components'
-import { parse2dArray, Point, pointToKey, product, sortNum, sum } from '../util'
+import {
+  getAdjacent,
+  iterate2dArray,
+  parse2dArray,
+  Point,
+  pointToKey,
+  product,
+  sortNum,
+  sum
+} from '../util'
 import input from './input'
 import { Visualize } from './components'
 
 const parseInput = () => parse2dArray(input, Number)
 
-const getAdjacent = (map: number[][], { x, y }: Point) =>
-  [
-    [-1, 0],
-    [1, 0],
-    [0, -1],
-    [0, 1]
-  ]
-    .map(([dx, dy]) => ({ x: x + dx, y: y + dy }))
-    .filter(
-      ({ x, y }) => x >= 0 && y >= 0 && y < map.length && x < map[y].length
-    )
-
 const getLowPoints = function* (map: number[][]) {
-  for (let y = 0; y < map.length; y++) {
-    for (let x = 0; x < map[y].length; x++) {
-      if (
-        getAdjacent(map, { x, y }).every((pos) => map[y][x] < map[pos.y][pos.x])
-      ) {
-        yield { x, y }
-      }
+  for (const { x, y, value } of iterate2dArray(map)) {
+    if (getAdjacent(map, { x, y }).every((pos) => map[pos.y][pos.x] > value)) {
+      yield { x, y }
     }
   }
 }

@@ -1,5 +1,5 @@
 import { h, Fragment } from 'preact'
-import { make2dArray } from '../util'
+import { iterate2dArray, make2dArray } from '../util'
 import { Answer } from '/components'
 import { Bingo } from './components'
 import input from './input'
@@ -32,14 +32,12 @@ const play = (nums: number[], boards: number[][][], firstWin = true) => {
   for (const n of nums) {
     boards.forEach((board, i) => {
       if (wins.has(i)) return
-      for (let y = 0; y < board.length; y++) {
-        for (let x = 0; x < board[y].length; x++) {
-          if (board[y][x] === n) {
-            bingos[i][y][x] = 'x'
-            if (isWin(bingos[i])) {
-              lastWin = i
-              wins.set(i, n)
-            }
+      for (const { x, y, value } of iterate2dArray(board)) {
+        if (value === n) {
+          bingos[i][y][x] = 'x'
+          if (isWin(bingos[i])) {
+            lastWin = i
+            wins.set(i, n)
           }
         }
       }
