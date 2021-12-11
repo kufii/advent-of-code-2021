@@ -1,8 +1,8 @@
 import { ComponentChild, h, Fragment } from 'preact'
-import { useState } from 'preact/hooks'
 import { classNames } from '/shared/web-utilities/util'
 import style from './style.css'
 import { Button, Icon } from '..'
+import { setShowVisualization, useStore } from '/store'
 
 interface Props {
   class?: string
@@ -10,16 +10,20 @@ interface Props {
 }
 
 export const Visualization = ({ class: className, children }: Props) => {
-  const [show, setShow] = useState(false)
+  const showVisualization = useStore((s) => s.showVisualization)
   return (
     <>
       <div>
-        <Button onClick={() => setShow(!show)} plain compact>
-          <Icon name={show ? 'eye-off' : 'eye'} />
-          {show ? 'Hide' : 'Show'} visualization
+        <Button
+          onClick={() => setShowVisualization(!showVisualization)}
+          plain
+          compact
+        >
+          <Icon name={showVisualization ? 'eye-off' : 'eye'} />
+          {showVisualization ? 'Hide' : 'Show'} visualization
         </Button>
       </div>
-      {show && (
+      {showVisualization && (
         <pre class={classNames(style.container, className)}>{children}</pre>
       )}
     </>

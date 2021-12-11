@@ -1,14 +1,15 @@
-import { h } from 'preact'
-import { Answer } from '/components'
+import { h, Fragment } from 'preact'
+import { Answer, Visualization } from '/components'
 import {
   getAdjacent,
   iterate2dArray,
-  nTimes,
   parse2dArray,
   Point,
   pointToKey
 } from '../util'
 import input from './input'
+import { useStore } from '/store'
+import { useEffect, useState } from 'preact/hooks'
 
 const parseInput = () => parse2dArray(input, Number)
 
@@ -33,28 +34,83 @@ const simulate = function* (map: number[][]) {
   }
 }
 
+const Visualize = ({ map }: { map?: number[][] }) => (
+  <Visualization>
+    {map?.map((line, y) => (
+      <Fragment key={`y=${y}`}>
+        {line.map((c) => c || <strong>{c}</strong>)}
+        <br />
+      </Fragment>
+    ))}
+  </Visualization>
+)
+
+const useSimulation = (times?: number) => {
+  const showVisualization = useStore((s) => s.showVisualization)
+  const [map, setMap] = useState<number[][]>()
+  const [flashes, setFlashes] = useState<number>()
+  const [n, setN] = useState<number>()
+  const [done, setDone] = useState(false)
+
+  useEffect(() => {
+    setDone(false)
+    const map = parseInput()
+    const sim = simulate(map)
+    let n = 0
+    let totalFlashes = 0
+    let interval: NodeJS.Timer
+
+    const tick = () => {
+      n++
+      const { map, flashes } = sim.next().value
+      totalFlashes += flashes
+      const done = n === times || flashes === map.length * map[0].length
+      if (showVisualization || done) {
+        setN(n)
+        setFlashes(totalFlashes)
+        setMap(map)
+      }
+      if (done) {
+        setDone(true)
+        clearInterval(interval)
+        return true
+      }
+    }
+    if (showVisualization) interval = setInterval(tick, 100)
+    else while (true) if (tick()) break
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [times, showVisualization])
+
+  return { map, flashes, n, done }
+}
+
 export const Part1 = () => {
-  const map = parseInput()
-  const sim = simulate(map)
-  let totalFlashes = 0
-  nTimes(100, () => (totalFlashes += sim.next().value.flashes))
+  const { map, flashes, done } = useSimulation(100)
   return (
-    <p>
-      The octopuses flash <Answer>{totalFlashes}</Answer> times after 100 steps.
-    </p>
+    <>
+      {flashes != null && done && (
+        <p>
+          The octopuses flash <Answer>{flashes}</Answer> times after 100 steps.
+        </p>
+      )}
+      <Visualize map={map} />
+    </>
   )
 }
 
 export const Part2 = () => {
-  const map = parseInput()
-  let n = 0
-  for (const { flashes } of simulate(map)) {
-    n++
-    if (flashes === map.length * map[0].length) break
-  }
+  const { map, n, done } = useSimulation()
   return (
-    <p>
-      At step <Answer>{n}</Answer> all the octopuses flash at the same time.
-    </p>
+    <>
+      {n != null && done && (
+        <p>
+          At step <Answer>{n}</Answer> all the octopuses flash at the same time.
+        </p>
+      )}
+      <Visualize map={map} />
+    </>
   )
 }
