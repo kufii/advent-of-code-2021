@@ -29,14 +29,14 @@ const traverse = (
   let pathsCount = 0
   const recurse = (
     node: string,
-    visited: Set<string> = new Set(),
+    prevVisited: Set<string> = new Set(),
     visitedTwice = false
   ) => {
-    const newVisited = new Set(visited)
-    newVisited.add(node)
+    const visited = new Set(prevVisited)
+    visited.add(node)
 
     if (node === 'end') {
-      if (!hasVisitedSmallCave || [...newVisited.keys()].some(isSmallCave))
+      if (!hasVisitedSmallCave || [...visited.keys()].some(isSmallCave))
         pathsCount++
       return
     }
@@ -50,7 +50,7 @@ const traverse = (
         continue
       recurse(
         cave,
-        newVisited,
+        visited,
         visitedTwice || (isSmallCave(cave) && visited.has(cave))
       )
     }
