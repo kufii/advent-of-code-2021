@@ -34,6 +34,7 @@ const traverse = (
   ) => {
     const visited = new Set(prevVisited)
     visited.add(node)
+    if (prevVisited.has(node) && isSmallCave(node)) visitedTwice = true
 
     if (node === 'end') {
       if (!hasVisitedSmallCave || [...visited.keys()].some(isSmallCave))
@@ -43,16 +44,13 @@ const traverse = (
 
     for (const cave of caves[node].values()) {
       if (
-        (!canVisitTwice || visitedTwice) &&
-        visited.has(cave) &&
-        isSmallCave(cave)
+        !(
+          (!canVisitTwice || visitedTwice) &&
+          visited.has(cave) &&
+          isSmallCave(cave)
+        )
       )
-        continue
-      recurse(
-        cave,
-        visited,
-        visitedTwice || (isSmallCave(cave) && visited.has(cave))
-      )
+        recurse(cave, visited, visitedTwice)
     }
   }
   recurse('start')
