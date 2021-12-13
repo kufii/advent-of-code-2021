@@ -34,3 +34,8 @@ export const classNames = (...classNames: (string | Falsy)[]) =>
   classNames.filter(Boolean).join(' ')
 
 export const newTab = { target: '_blank', rel: 'noopener noreferrer' }
+
+export const setIntervalImmediate = (cb: () => any, ms = 0) => {
+  cb()
+  return setInterval(cb, ms)
+}

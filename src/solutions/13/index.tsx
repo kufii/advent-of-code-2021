@@ -3,6 +3,7 @@ import { Answer, Visualization } from '/components'
 import input from './input'
 import { InfiniteGrid, output2dArray } from '../util'
 import { useEffect, useState } from 'preact/hooks'
+import { setIntervalImmediate } from '/shared/web-utilities/util'
 
 enum CELL {
   Empty = ' ',
@@ -92,18 +93,18 @@ export const Part2 = () => {
     const { instructions, paper } = parseInput()
     const gen = iterateFolds(paper, instructions)
 
-    const interval = setInterval(() => {
+    const id = setIntervalImmediate(() => {
       const { value, done } = gen.next()
       if (done) {
         setDone(true)
-        clearInterval(interval)
+        clearInterval(id)
       } else if (value) {
         setOutput(outputPaper(value))
       }
-    }, 100)
+    }, 150)
 
     return () => {
-      clearInterval(interval)
+      clearInterval(id)
     }
   }, [])
 

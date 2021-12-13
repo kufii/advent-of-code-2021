@@ -10,6 +10,7 @@ import {
 import input from './input'
 import { useStore } from '/store'
 import { useEffect, useState } from 'preact/hooks'
+import { setIntervalImmediate } from '/shared/web-utilities/util'
 
 const parseInput = () => parse2dArray(input, Number)
 
@@ -58,7 +59,7 @@ const useSimulation = (times?: number) => {
     const sim = simulate(map)
     let n = 0
     let totalFlashes = 0
-    let interval: NodeJS.Timer
+    let id: NodeJS.Timer
 
     const tick = () => {
       n++
@@ -72,15 +73,15 @@ const useSimulation = (times?: number) => {
       }
       if (done) {
         setDone(true)
-        clearInterval(interval)
+        clearInterval(id)
         return true
       }
     }
-    if (showVisualization) interval = setInterval(tick, 100)
+    if (showVisualization) id = setIntervalImmediate(tick, 100)
     else while (true) if (tick()) break
 
     return () => {
-      clearInterval(interval)
+      clearInterval(id)
     }
   }, [times, showVisualization])
 
