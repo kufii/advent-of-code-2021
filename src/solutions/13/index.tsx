@@ -37,15 +37,17 @@ const parseInput = () => {
 }
 
 const fold = (paper: InfiniteGrid<CELL>, axis: string, n: number) => {
+  paper.cells
+    .filter(
+      ({ x, y, value }) =>
+        value === CELL.Dot && (axis === AXIS.X ? x < n : y > n)
+    )
+    .forEach(({ x, y }) => {
+      const [foldX, foldY] =
+        axis === AXIS.X ? [n + (n - x), y] : [x, n + (n - y)]
+      paper.set(foldX, foldY, CELL.Dot)
+    })
   const { min, max } = paper.bounds
-  for (let x = min.x; x <= (axis === AXIS.X ? n - 1 : max.x); x++) {
-    for (let y = axis === AXIS.X ? min.y : n + 1; y <= max.y; y++) {
-      if (paper.get(x, y) === CELL.Dot) {
-        const [foldX, foldY] = axis === AXIS.X ? [max.x - x, y] : [x, max.y - y]
-        paper.set(foldX, foldY, CELL.Dot)
-      }
-    }
-  }
   const [minFold, maxFold] =
     axis === AXIS.X
       ? [{ x: n + 1, y: min.y }, max]
@@ -98,7 +100,7 @@ export const Part2 = () => {
       } else if (value) {
         setOutput(outputPaper(value))
       }
-    }, 50)
+    }, 100)
 
     return () => {
       clearInterval(interval)

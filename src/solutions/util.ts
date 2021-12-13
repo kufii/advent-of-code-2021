@@ -81,7 +81,7 @@ export class InfiniteGrid<T> {
     this.grid = new Map()
     if (array) {
       for (const { x, y, value } of iterate2dArray(array)) {
-        this.set(x, y, value)
+        if (value !== fill) this.set(x, y, value)
       }
     }
   }
