@@ -6,24 +6,31 @@ import { setShowVisualization, useStore } from '/store'
 
 interface Props {
   class?: string
+  forced?: boolean
   children: ComponentChild
 }
 
-export const Visualization = ({ class: className, children }: Props) => {
+export const Visualization = ({
+  class: className,
+  forced,
+  children
+}: Props) => {
   const showVisualization = useStore((s) => s.showVisualization)
   return (
     <>
-      <div>
-        <Button
-          onClick={() => setShowVisualization(!showVisualization)}
-          plain
-          compact
-        >
-          <Icon name={showVisualization ? 'eye-off' : 'eye'} />
-          {showVisualization ? 'Hide' : 'Show'} visualization
-        </Button>
-      </div>
-      {showVisualization && (
+      {!forced && (
+        <div>
+          <Button
+            onClick={() => setShowVisualization(!showVisualization)}
+            plain
+            compact
+          >
+            <Icon name={showVisualization ? 'eye-off' : 'eye'} />
+            {showVisualization ? 'Hide' : 'Show'} visualization
+          </Button>
+        </div>
+      )}
+      {(showVisualization || forced) && (
         <pre class={classNames(style.container, className)}>{children}</pre>
       )}
     </>

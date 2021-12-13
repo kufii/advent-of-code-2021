@@ -76,9 +76,14 @@ export class InfiniteGrid<T> {
   fill: T
   grid: Map<string, T>
 
-  constructor(fill: T) {
+  constructor(fill: T, array?: T[][]) {
     this.fill = fill
     this.grid = new Map()
+    if (array) {
+      for (const { x, y, value } of iterate2dArray(array)) {
+        this.set(x, y, value)
+      }
+    }
   }
 
   get cells() {
@@ -96,7 +101,7 @@ export class InfiniteGrid<T> {
       },
       max: {
         x: cells.map(({ x }) => x).reduce(max),
-        y: cells.map(({ y }) => y).reduce(min)
+        y: cells.map(({ y }) => y).reduce(max)
       }
     }
   }
