@@ -9,8 +9,13 @@ enum CELL {
   Dot = '█'
 }
 
+enum AXIS {
+  X = 'x',
+  Y = 'y'
+}
+
 interface Instruction {
-  axis: string
+  axis: AXIS
   n: number
 }
 
@@ -20,7 +25,7 @@ const parseInput = () => {
     instructions: inst
       .split('\n')
       .map((str) => str.match(/^fold along (?<axis>.)=(?<n>\d+)$/u)!.groups!)
-      .map(({ axis, n }) => ({ axis, n: Number(n) })),
+      .map(({ axis, n }) => ({ axis: axis as AXIS, n: Number(n) })),
     paper: coords
       .split('\n')
       .map((line) => line.split(',').map(Number))
@@ -33,16 +38,18 @@ const parseInput = () => {
 
 const fold = (paper: InfiniteGrid<CELL>, axis: string, n: number) => {
   const { min, max } = paper.bounds
-  for (let x = min.x; x <= (axis === 'x' ? n - 1 : max.x); x++) {
-    for (let y = axis === 'x' ? min.y : n + 1; y <= max.y; y++) {
+  for (let x = min.x; x <= (axis === AXIS.X ? n - 1 : max.x); x++) {
+    for (let y = axis === AXIS.X ? min.y : n + 1; y <= max.y; y++) {
       if (paper.get(x, y) === CELL.Dot) {
-        const [foldX, foldY] = axis === 'x' ? [max.x - x, y] : [x, max.y - y]
+        const [foldX, foldY] = axis === AXIS.X ? [max.x - x, y] : [x, max.y - y]
         paper.set(foldX, foldY, CELL.Dot)
       }
     }
   }
   const [minFold, maxFold] =
-    axis === 'x' ? [{ x: n + 1, y: min.y }, max] : [min, { x: max.x, y: n - 1 }]
+    axis === AXIS.X
+      ? [{ x: n + 1, y: min.y }, max]
+      : [min, { x: max.x, y: n - 1 }]
   return new InfiniteGrid(CELL.Empty, paper.toArray(minFold, maxFold))
 }
 
