@@ -17,14 +17,14 @@ const parseInput = () => {
   }
 }
 
-const stringToPairs = (str: string) => {
-  const pairs = new Map<string, number>()
-  for (let i = 0; i < str.length - 1; i++) {
-    const pair = str[i] + str[i + 1]
-    pairs.set(pair, (pairs.get(pair) ?? 0) + 1)
-  }
-  return pairs
-}
+const stringToPairs = (str: string) =>
+  [...str]
+    .slice(0, -1)
+    .map((c, i) => c + str[i + 1])
+    .reduce(
+      (acc, pair) => acc.set(pair, (acc.get(pair) ?? 0) + 1),
+      new Map<string, number>()
+    )
 
 const pairsToElementCounts = (
   pairs: Map<string, number>,
