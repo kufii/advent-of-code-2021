@@ -1,5 +1,5 @@
 import { h, Fragment } from 'preact'
-import { Answer, Visualization } from '/components'
+import { Answer, Array2d, Visualization } from '/components'
 import input from './input'
 import {
   dijkstra,
@@ -41,24 +41,18 @@ interface VisualizeProps {
 }
 
 const Visualize = ({ map, path, factor = 1 }: VisualizeProps) => {
-  const grid = new InfiniteGrid(0)
+  const grid = new InfiniteGrid<number | JSX.Element>(0)
   for (let y = 0; y < map.length * factor; y++) {
     for (let x = 0; x < map[0].length * factor; x++) {
-      grid.set(x, y, getRiskLevel(map, { x, y }))
+      const n = getRiskLevel(map, { x, y })
+      grid.set(x, y, path.has(pointToKey({ x, y })) ? <strong>{n}</strong> : n)
     }
   }
   const min = { x: 0, y: 0 }
   const max = { x: map[0].length * factor - 1, y: map.length * factor - 1 }
   return (
     <Visualization>
-      {grid.toArray(min, max).map((line, y) => (
-        <Fragment key={y}>
-          {line.map((n, x) =>
-            path.has(pointToKey({ x, y })) ? <strong>{n}</strong> : n
-          )}
-          <br />
-        </Fragment>
-      ))}
+      <Array2d array={grid.toArray(min, max)} />
     </Visualization>
   )
 }

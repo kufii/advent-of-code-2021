@@ -35,6 +35,46 @@ export const minBy =
   (a: T, b: T) =>
     cb(b) < cb(a) ? b : a
 
+export const sum = (a: number, b: number) => a + b
+
+export const product = (a: number, b: number) => a * b
+
+export const alphaSort = (a: string, b: string) => a.localeCompare(b)
+
+export const sortStr = (str: string) => [...str].sort(alphaSort).join('')
+
+export const sortNum = (a: number, b: number) => a - b
+
+export const sortBy =
+  <T>(
+    ...cbs: (
+      | ((item: T) => string | number)
+      | { desc: boolean; cb: (item: T) => string | number }
+    )[]
+  ) =>
+  (a: T, b: T) => {
+    for (const cb of cbs) {
+      const [fn, desc] = cb instanceof Function ? [cb, true] : [cb.cb, cb.desc]
+      const aa = fn(a)
+      const bb = fn(b)
+      const isNumber = typeof aa === 'number' && typeof bb === 'number'
+      const diff = desc
+        ? isNumber
+          ? bb - aa
+          : bb.toString().localeCompare(aa.toString())
+        : isNumber
+        ? aa - bb
+        : aa.toString().localeCompare(bb.toString())
+      if (diff !== 0) return diff
+    }
+    return 0
+  }
+
+export const desc = <T>(cb: (item: T) => string | number) => ({
+  desc: true,
+  cb
+})
+
 export interface Point {
   x: number
   y: number
@@ -154,16 +194,6 @@ export const nTimes = (n: number, cb: (n: number) => unknown) => {
   for (let i = 0; i < n; i++) cb(i)
 }
 
-export const sum = (a: number, b: number) => a + b
-
-export const product = (a: number, b: number) => a * b
-
-export const alphaSort = (a: string, b: string) => a.localeCompare(b)
-
-export const sortStr = (str: string) => [...str].sort(alphaSort).join('')
-
-export const sortNum = (a: number, b: number) => a - b
-
 export const toPath = (
   prev: Map<string, string>,
   source: string,
@@ -182,15 +212,12 @@ export const dijkstra = (
   source: string,
   dest: string | null,
   cbNeighbors: (key: string) => string[],
-  cbDist?: (key: string) => number
+  cbDist?: (to: string, from: string) => number
 ) => {
-  const allKeys = new Set([source])
   const nodes = new Set([source])
-  const dist = new Map<string, number>()
+  const dist = new Map<string, number>([[source, 0]])
   const prev = new Map<string, string>()
-
   const getDist = (key: string) => dist.get(key) ?? Infinity
-  dist.set(source, 0)
 
   while (nodes.size) {
     const closest = [...nodes].reduce(minBy((n) => getDist(n)))
@@ -204,14 +231,11 @@ export const dijkstra = (
     nodes.delete(closest)
     const neighbors = cbNeighbors(closest)
     neighbors.forEach((neighbor) => {
-      if (!allKeys.has(neighbor)) {
-        allKeys.add(neighbor)
-        nodes.add(neighbor)
-      }
-      const alt = getDist(closest) + (cbDist ? cbDist(neighbor) : 1)
+      const alt = getDist(closest) + (cbDist ? cbDist(neighbor, closest) : 1)
       if (alt < getDist(neighbor)) {
         dist.set(neighbor, alt)
         prev.set(neighbor, closest)
+        nodes.add(neighbor)
       }
     })
   }

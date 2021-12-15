@@ -1,5 +1,5 @@
 import { h, Fragment } from 'preact'
-import { Answer, Visualization } from '/components'
+import { Answer, Array2d, Visualization } from '/components'
 import {
   getAdjacent,
   iterate2dArray,
@@ -37,12 +37,11 @@ const simulate = function* (map: number[][]) {
 
 const Visualize = ({ map }: { map?: number[][] }) => (
   <Visualization>
-    {map?.map((line, y) => (
-      <Fragment key={`y=${y}`}>
-        {line.map((c) => c || <strong>{c}</strong>)}
-        <br />
-      </Fragment>
-    ))}
+    {map && (
+      <Array2d
+        array={map.map((line) => line.map((c) => c || <strong>{c}</strong>))}
+      />
+    )}
   </Visualization>
 )
 
