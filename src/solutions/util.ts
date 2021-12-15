@@ -13,7 +13,7 @@ export const range = (start: number, end: number) => {
   return arr
 }
 
-export const make2dArray = <T>(ySize: number, xSize: number, fill: T): T[][] =>
+export const make2dArray = <T>(ySize: number, xSize: number, fill?: T): T[][] =>
   Array(ySize)
     .fill(null)
     .map(() => Array(xSize).fill(fill))

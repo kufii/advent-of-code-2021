@@ -4,8 +4,9 @@ import input from './input'
 import {
   dijkstra,
   getAdjacent,
-  InfiniteGrid,
+  iterate2dArray,
   keyToPoint,
+  make2dArray,
   parse2dArray,
   Point,
   pointToKey
@@ -41,18 +42,17 @@ interface VisualizeProps {
 }
 
 const Visualize = ({ map, path, factor = 1 }: VisualizeProps) => {
-  const grid = new InfiniteGrid<number | JSX.Element>(0)
-  for (let y = 0; y < map.length * factor; y++) {
-    for (let x = 0; x < map[0].length * factor; x++) {
-      const n = getRiskLevel(map, { x, y })
-      grid.set(x, y, path.has(pointToKey({ x, y })) ? <strong>{n}</strong> : n)
-    }
+  const array = make2dArray<number | JSX.Element>(
+    map.length * factor,
+    map[0].length * factor
+  )
+  for (const { x, y } of iterate2dArray(array)) {
+    const n = getRiskLevel(map, { x, y })
+    array[y][x] = path.has(pointToKey({ x, y })) ? <strong>{n}</strong> : n
   }
-  const min = { x: 0, y: 0 }
-  const max = { x: map[0].length * factor - 1, y: map.length * factor - 1 }
   return (
     <Visualization>
-      <Array2d array={grid.toArray(min, max)} />
+      <Array2d array={array} />
     </Visualization>
   )
 }
