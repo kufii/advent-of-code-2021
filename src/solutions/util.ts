@@ -172,7 +172,7 @@ export const toPath = (
   const path = []
   let current
   do {
-    current = current ? prev.get(current) : dest
+    current = current ? prev.get(current)! : dest
     path.unshift(current)
   } while (current !== source)
   return path
