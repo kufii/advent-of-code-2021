@@ -54,7 +54,7 @@ export const sortBy =
   ) =>
   (a: T, b: T) => {
     for (const cb of cbs) {
-      const [fn, desc] = cb instanceof Function ? [cb, true] : [cb.cb, cb.desc]
+      const [fn, desc] = cb instanceof Function ? [cb, false] : [cb.cb, cb.desc]
       const aa = fn(a)
       const bb = fn(b)
       const isNumber = typeof aa === 'number' && typeof bb === 'number'
