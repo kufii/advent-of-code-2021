@@ -17,7 +17,7 @@ const parseInput = () => parse2dArray(input, Number)
 
 const getLowPoints = function* (map: number[][]) {
   for (const { x, y, value } of iterate2dArray(map)) {
-    if (getAdjacent(map, { x, y }).every((pos) => map[pos.y][pos.x] > value)) {
+    if (getAdjacent({ x, y }, map).every((pos) => map[pos.y][pos.x] > value)) {
       yield { x, y }
     }
   }
@@ -27,7 +27,7 @@ const getBasin = (arr: number[][], point: Point) => {
   const basin = new Set<string>()
   const recursive = (point: Point) => {
     basin.add(pointToKey(point))
-    getAdjacent(arr, point)
+    getAdjacent(point, arr)
       .filter(({ x, y }) => arr[y][x] < 9 && arr[y][x] > arr[point.y][point.x])
       .forEach(recursive)
   }

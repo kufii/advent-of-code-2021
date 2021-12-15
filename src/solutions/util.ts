@@ -42,7 +42,16 @@ export interface Point {
 
 export const pointToKey = ({ x, y }: Point) => `${x},${y}`
 
-export const getAdjacent = (map: any[][], { x, y }: Point, diagonal = false) =>
+export const keyToPoint = (key: string) => {
+  const [x, y] = key.split(',').map(Number)
+  return { x, y }
+}
+
+export const getAdjacent = (
+  { x, y }: Point,
+  map: any[][] | Point,
+  diagonal = false
+) =>
   [
     [-1, 0],
     [1, 0],
@@ -59,7 +68,11 @@ export const getAdjacent = (map: any[][], { x, y }: Point, diagonal = false) =>
   ]
     .map(([dx, dy]) => ({ x: x + dx, y: y + dy }))
     .filter(
-      ({ x, y }) => x >= 0 && y >= 0 && y < map.length && x < map[y].length
+      ({ x, y }) =>
+        x >= 0 &&
+        y >= 0 &&
+        y < (Array.isArray(map) ? map.length : map.y) &&
+        x < (Array.isArray(map) ? map[0].length : map.x)
     )
 
 export const parse2dArray = <T>(str: string, cbMap: (c: string) => T) =>
@@ -87,9 +100,10 @@ export class InfiniteGrid<T> {
   }
 
   get cells() {
-    return [...this.grid.entries()]
-      .map(([pos, value]) => [...pos.split(','), value])
-      .map(([x, y, value]) => ({ x: Number(x), y: Number(y), value }))
+    return [...this.grid.entries()].map(([pos, value]) => ({
+      ...keyToPoint(pos),
+      value
+    }))
   }
 
   get bounds() {
@@ -149,3 +163,57 @@ export const alphaSort = (a: string, b: string) => a.localeCompare(b)
 export const sortStr = (str: string) => [...str].sort(alphaSort).join('')
 
 export const sortNum = (a: number, b: number) => a - b
+
+export const toPath = (
+  prev: Map<string, string>,
+  source: string,
+  dest: string
+) => {
+  const path = []
+  let current
+  do {
+    current = current ? prev.get(current) : dest
+    path.unshift(current)
+  } while (current !== source)
+  return path
+}
+
+export const dijkstra = (
+  source: string,
+  dest: string | null,
+  cbNeighbors: (key: string) => string[],
+  cbDist?: (key: string) => number
+) => {
+  const allKeys = new Set([source])
+  const nodes = new Set([source])
+  const dist = new Map<string, number>()
+  const prev = new Map<string, string>()
+
+  const getDist = (key: string) => dist.get(key) ?? Infinity
+  dist.set(source, 0)
+
+  while (nodes.size) {
+    const closest = [...nodes].reduce(minBy((n) => getDist(n)))
+    if (dest && closest === dest) {
+      return {
+        distance: dist.get(dest),
+        path: toPath(prev, source, dest),
+        prev
+      }
+    }
+    nodes.delete(closest)
+    const neighbors = cbNeighbors(closest)
+    neighbors.forEach((neighbor) => {
+      if (!allKeys.has(neighbor)) {
+        allKeys.add(neighbor)
+        nodes.add(neighbor)
+      }
+      const alt = getDist(closest) + (cbDist ? cbDist(neighbor) : 1)
+      if (alt < getDist(neighbor)) {
+        dist.set(neighbor, alt)
+        prev.set(neighbor, closest)
+      }
+    })
+  }
+  return { prev }
+}

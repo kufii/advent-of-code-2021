@@ -25,7 +25,7 @@ const simulate = function* (map: number[][]) {
       if (map[y][x] > 9) {
         flashed.add(key)
         map[y][x] = 0
-        getAdjacent(map, point, true).forEach(up)
+        getAdjacent(point, map, true).forEach(up)
       }
     }
     for (const { x, y } of iterate2dArray(map)) {
