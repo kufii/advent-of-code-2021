@@ -56,7 +56,6 @@ const parsePacket = (packet: string) => {
   }
 
   const parseOperator = () => {
-    const toAdd: string[] = []
     const values: number[] = []
     let subPackets = ''
 
@@ -64,7 +63,7 @@ const parsePacket = (packet: string) => {
       const { packets: newPackets, value } = parsePacket(packet)
       subPackets += newPackets[0]
       extract(newPackets[0].length)
-      toAdd.push(...newPackets)
+      packets.push(...newPackets)
       values.push(value)
     }
 
@@ -83,7 +82,6 @@ const parsePacket = (packet: string) => {
     }
     fullPacket += subPackets
 
-    packets.push(...toAdd)
     value = getOperatorValue(values, parseInt(type, 2))
   }
 
