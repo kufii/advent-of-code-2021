@@ -4,10 +4,7 @@ import input from './input'
 import { max, min, nTimes, product, sum } from '../util'
 
 const parseInput = () =>
-  input
-    .split('')
-    .map((c) => parseInt(c, 16).toString(2).padStart(4, '0'))
-    .join('')
+  [...input].map((c) => parseInt(c, 16).toString(2).padStart(4, '0')).join('')
 
 const getOperatorValue = (nums: number[], type: number) => {
   switch (type) {
@@ -31,25 +28,25 @@ const getOperatorValue = (nums: number[], type: number) => {
 }
 
 const parsePacket = (packet: string) => {
+  let fullPacket = ''
   const extract = (n: number) => {
     const result = packet.slice(0, n)
     packet = packet.slice(n)
+    fullPacket += result
     return result
   }
 
   const packets: string[] = []
   let value = 0
 
-  const version = extract(3)
+  extract(3)
   const type = extract(3)
-  let fullPacket = version + type
 
   const parseLiteral = () => {
     let bits: string
     let output = ''
     do {
       bits = extract(5)
-      fullPacket += bits
       output += bits.slice(1)
     } while (bits.startsWith('1'))
     value = parseInt(output, 2)
@@ -68,19 +65,15 @@ const parsePacket = (packet: string) => {
     }
 
     const lType = extract(1)
-    fullPacket += lType
     if (lType === '0') {
       const numBits = extract(15)
-      fullPacket += numBits
       while (subPackets.length < parseInt(numBits, 2)) {
         addSubPacket()
       }
     } else {
       const numPackets = extract(11)
-      fullPacket += numPackets
       nTimes(parseInt(numPackets, 2), addSubPacket)
     }
-    fullPacket += subPackets
 
     value = getOperatorValue(values, parseInt(type, 2))
   }
