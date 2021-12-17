@@ -1,7 +1,7 @@
 import { h } from 'preact'
 import { Answer } from '/components'
 import input from './input'
-import { maxBy, Point, range } from '../util'
+import { isInRange, maxBy, Point, range } from '../util'
 
 const parseInput = () => {
   const { xFrom, xTo, yFrom, yTo } = input.match(
@@ -22,13 +22,13 @@ interface Trajectory {
 const launch = (dx: number, dy: number, from: Point, to: Point) => {
   const pos = { x: 0, y: 0 }
   let maxY = 0
-  while (pos.x <= to.x && pos.y >= from.y) {
+  while ((dx >= 0 ? pos.x <= to.x : pos.x >= from.x) && pos.y >= from.y) {
     pos.x += dx
     pos.y += dy
     maxY = Math.max(maxY, pos.y)
     dy--
     if (dx) dx > 0 ? dx-- : dx++
-    if (pos.y <= to.y && pos.y >= from.y && pos.x >= from.x && pos.x <= to.x) {
+    if (isInRange(pos.x, from.x, to.x) && isInRange(pos.y, from.y, to.y)) {
       return maxY
     }
   }

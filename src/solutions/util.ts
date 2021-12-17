@@ -13,6 +13,9 @@ export const range = (start: number, end: number) => {
   return arr
 }
 
+export const isInRange = (n: number, start: number, end: number) =>
+  n >= Math.min(start, end) && n <= Math.max(start, end)
+
 export const make2dArray = <T>(ySize: number, xSize: number, fill?: T): T[][] =>
   Array(ySize)
     .fill(null)
