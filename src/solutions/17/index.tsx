@@ -27,7 +27,7 @@ const launch = (dx: number, dy: number, from: Point, to: Point) => {
     pos.y += dy
     maxY = Math.max(maxY, pos.y)
     dy--
-    if (dx) dx--
+    if (dx) dx > 0 ? dx-- : dx++
     if (pos.y <= to.y && pos.y >= from.y && pos.x >= from.x && pos.x <= to.x) {
       return maxY
     }
@@ -37,7 +37,10 @@ const launch = (dx: number, dy: number, from: Point, to: Point) => {
 const getTrajectories = (from: Point, to: Point) => {
   const matches: Trajectory[] = []
   for (const dy of range(from.y, 1000)) {
-    for (const dx of range(1, to.x)) {
+    for (const dx of range(
+      Math.min(from.x, to.x, 0),
+      Math.max(from.x, to.x, 0)
+    )) {
       const maxY = launch(dx, dy, from, to)
       if (maxY != null) matches.push({ dx, dy, maxY })
     }
