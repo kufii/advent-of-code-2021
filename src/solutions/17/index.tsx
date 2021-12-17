@@ -36,7 +36,7 @@ const launch = (dx: number, dy: number, from: Point, to: Point) => {
 
 const getTrajectories = (from: Point, to: Point) => {
   const matches: Trajectory[] = []
-  for (const dy of range(from.y, Math.abs(from.y) + 1)) {
+  for (const dy of range(from.y, Math.abs(from.y))) {
     for (const dx of range(
       Math.min(from.x, to.x, 0),
       Math.max(from.x, to.x, 0)
@@ -53,7 +53,6 @@ export const Part1 = () => {
   const { dx, dy, maxY } = getTrajectories(from, to).reduce(
     maxBy((t) => t.maxY)
   )
-  launch(dx, dy, from, to)
   return (
     <p>
       The probe reaches a y position of <Answer>{maxY}</Answer> with initial
