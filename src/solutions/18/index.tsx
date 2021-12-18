@@ -32,8 +32,7 @@ const explode = (tokens: Token[]) => {
     const { n, depth } = tokens[i]
     if (depth === 4) {
       if (i > 0) tokens[i - 1].n += n
-      const right = tokens[i + 2]
-      if (right) tokens[i + 2].n += tokens[i + 1].n
+      if (i + 2 < tokens.length) tokens[i + 2].n += tokens[i + 1].n
       tokens[i] = { n: 0, depth: depth - 1 }
       tokens.splice(i + 1, 1)
       return tokens
