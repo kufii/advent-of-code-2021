@@ -58,15 +58,10 @@ const split = (tokens: Token[]) => {
 
 const reduce = (tokens: Token[]) => {
   while (true) {
-    let newTokens = explode(tokens)
+    const newTokens = explode(tokens) ?? split(tokens)
     if (newTokens) tokens = newTokens
-    else {
-      newTokens = split(tokens)
-      if (newTokens) tokens = newTokens
-      else break
-    }
+    else return tokens
   }
-  return tokens
 }
 
 const add = (tokens: Token[][]) =>
