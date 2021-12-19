@@ -244,3 +244,27 @@ export const dijkstra = (
   }
   return { prev }
 }
+
+export const nestedLoop = function* (
+  n: number,
+  start: number | number[],
+  end: number | number[]
+): IterableIterator<number[]> {
+  const get = (value: number | number[], index: number) =>
+    Array.isArray(value) ? value[index] : value
+  const arr = Array(n)
+    .fill(null)
+    .map((_, i) => get(start, i))
+  let i = 0
+  while (true) {
+    yield arr.slice()
+    arr[0]++
+    while (arr[i] === get(end, i) + 1) {
+      arr[i] = get(start, i)
+      i++
+      if (i === n) return
+      arr[i]++
+      if (arr[i] !== get(end, i) + 1) i = 0
+    }
+  }
+}
