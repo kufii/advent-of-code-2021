@@ -107,8 +107,8 @@ export const locateScanners = function* ([
     }
   }
   while (transformedScanners.length) {
+    yield { numLeft: transformedScanners.length }
     findMatch()
-    yield
   }
 
   yield { beacons, scannerCoords }
@@ -125,31 +125,44 @@ const getLargestManhattanDistance = (scanners: number[][]) =>
 
 const useSolution = () => {
   const [running, setRunning] = useState(true)
+  const [numLeft, setNumLeft] = useState<number | undefined>()
   const [beacons, setBeacons] = useState<Set<string> | undefined>()
   const [scannerCoords, setScannerCoords] = useState<Coord[]>()
 
   useEffect(() => {
     const input = parseInput()
     const gen = locateScanners(input)
+
     const id = setInterval(() => {
       const { value } = gen.next()
-      if (value) {
-        setBeacons(value.beacons)
-        setScannerCoords(value.scannerCoords)
+      setNumLeft(value?.numLeft)
+      if (value?.beacons) {
+        const { beacons, scannerCoords } = value
+        setBeacons(beacons)
+        setScannerCoords(scannerCoords)
         setRunning(false)
         clearInterval(id)
       }
     }, 0)
+
     return () => clearInterval(id)
   }, [])
 
-  return { running, beacons, scannerCoords }
+  return { running, numLeft, beacons, scannerCoords }
 }
 
 export const Part1 = () => {
-  const { beacons } = useSolution()
+  const { numLeft, beacons } = useSolution()
 
-  if (!beacons) return <p>Running... This takes a very long time...</p>
+  if (!beacons)
+    return (
+      <p>
+        {numLeft == null
+          ? 'Locating scanners'
+          : `${numLeft} scanners left to locate`}
+        ... This takes a very long time...
+      </p>
+    )
 
   return (
     <p>
@@ -159,9 +172,17 @@ export const Part1 = () => {
 }
 
 export const Part2 = () => {
-  const { scannerCoords } = useSolution()
+  const { scannerCoords, numLeft } = useSolution()
 
-  if (!scannerCoords) return <p>Running... This takes a very long time...</p>
+  if (!scannerCoords)
+    return (
+      <p>
+        {numLeft == null
+          ? 'Locating scanners'
+          : `${numLeft} scanners left to locate`}
+        ... This takes a very long time...
+      </p>
+    )
 
   return (
     <p>
