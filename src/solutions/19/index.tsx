@@ -186,7 +186,7 @@ export const Part2 = () => {
 
   return (
     <p>
-      The greatest distance between scannerCoords is{' '}
+      The greatest distance between any 2 scanners is{' '}
       <Answer>{getLargestManhattanDistance(scannerCoords)}</Answer>.
     </p>
   )
