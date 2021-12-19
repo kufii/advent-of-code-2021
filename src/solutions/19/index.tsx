@@ -88,9 +88,10 @@ export const locateScanners = function* ([
     for (let i = 0; i < transformedScanners.length; i++) {
       const scanner = transformedScanners[i]
       for (const points of scanner) {
-        for (const coord of beacons) {
-          const [bx, by, bz] = coord.split(',').map(Number)
-          for (const [x, y, z] of points) {
+        for (let j = 0; j < points.length - 12; j++) {
+          const [x, y, z] = points[j]
+          for (const coord of beacons) {
+            const [bx, by, bz] = coord.split(',').map(Number)
             const [dx, dy, dz] = [bx - x, by - y, bz - z]
             const notMatches = points
               .map(([x, y, z]) => key([x + dx, y + dy, z + dz]))
