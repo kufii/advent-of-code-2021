@@ -56,7 +56,6 @@ export const locateScanners = function* ([
   const beacons = new Set(firstScanner.map(key))
   const scannerCoords = [[0, 0, 0]]
   const permutations = [...getPermutations()]
-  console.log(permutations)
 
   const findMatch = () => {
     for (let i = 0; i < scanners.length; i++) {
