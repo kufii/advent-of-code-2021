@@ -1,7 +1,7 @@
 import { h } from 'preact'
 import { Answer } from '/components'
 import input from './input'
-import { max, nestedLoop } from '../util'
+import { max } from '../util'
 import { useEffect, useState } from 'preact/hooks'
 
 type Axis = 'x' | 'y' | 'z'
@@ -29,24 +29,51 @@ const parseInput = () =>
 
 const key = (coord: Coord) => coord.join(',')
 
-const getPermutations = function* () {
-  for (const [dirX, dirY, dirZ] of nestedLoop(3, 0, 1)) {
-    for (const mapTo of nestedLoop(3, 'x'.charCodeAt(0), 'z'.charCodeAt(0))) {
-      if (new Set(mapTo).size !== 3) continue
-      const [x, y, z] = mapTo.map((c) => String.fromCharCode(c) as Axis)
-      const direction: Direction = {
-        x: { map: x, dir: dirX || -1 },
-        y: { map: y, dir: dirY || -1 },
-        z: { map: z, dir: dirZ || -1 }
-      }
-      yield direction
-    }
-  }
-}
+const permutations: Direction[] = [
+  ['x', 'y', 'z'],
+  ['y', '-x', 'z'],
+  ['-x', '-y', 'z'],
+  ['-y', 'x', 'z'],
+  ['z', 'y', '-x'],
+  ['y', '-z', '-x'],
+  ['-z', '-y', '-x'],
+  ['-y', 'z', '-x'],
+  ['z', '-x', '-y'],
+  ['-x', '-z', '-y'],
+  ['-z', 'x', '-y'],
+  ['x', 'z', '-y'],
+  ['z', '-y', 'x'],
+  ['-y', '-z', 'x'],
+  ['-z', 'y', 'x'],
+  ['y', 'z', 'x'],
+  ['z', 'x', 'y'],
+  ['x', '-z', 'y'],
+  ['-z', '-x', 'y'],
+  ['-x', 'z', 'y'],
+  ['-x', 'y', '-z'],
+  ['y', 'x', '-z'],
+  ['x', '-y', '-z'],
+  ['-y', '-x', '-z']
+]
+  .map((coord) =>
+    coord.map((num) => ({
+      map: (num.startsWith('-') ? num.charAt(1) : num) as Axis,
+      dir: num.startsWith('-') ? -1 : 1
+    }))
+  )
+  .map(([x, y, z]) => ({ x, y, z }))
 
 const transform = ([x, y, z]: Coord, { x: tx, y: ty, z: tz }: Direction) => {
   const obj: Record<string, number> = { x, y, z }
   return [obj[tx.map] * tx.dir, obj[ty.map] * ty.dir, obj[tz.map] * tz.dir]
+}
+
+const transformScanner = (scanner: Coord[]) => {
+  const array: Coord[][] = []
+  for (const p of permutations) {
+    array.push(scanner.map((coord) => transform(coord, p)))
+  }
+  return array
 }
 
 export const locateScanners = function* ([
@@ -54,14 +81,13 @@ export const locateScanners = function* ([
   ...scanners
 ]: Coord[][]) {
   const beacons = new Set(firstScanner.map(key))
+  const transformedScanners = scanners.map(transformScanner)
   const scannerCoords = [[0, 0, 0]]
-  const permutations = [...getPermutations()]
 
   const findMatch = () => {
-    for (let i = 0; i < scanners.length; i++) {
-      const scanner = scanners[i]
-      for (const perm of permutations) {
-        const points = scanner.map((point) => transform(point, perm))
+    for (let i = 0; i < transformedScanners.length; i++) {
+      const scanner = transformedScanners[i]
+      for (const points of scanner) {
         for (const coord of beacons) {
           const [bx, by, bz] = coord.split(',').map(Number)
           for (const [x, y, z] of points) {
@@ -71,7 +97,7 @@ export const locateScanners = function* ([
               .filter((point) => !beacons.has(point))
             if (points.length - notMatches.length >= 12) {
               notMatches.forEach((point) => beacons.add(point))
-              scanners.splice(i, 1)
+              transformedScanners.splice(i, 1)
               scannerCoords.push([dx, dy, dz])
               return
             }
@@ -80,7 +106,7 @@ export const locateScanners = function* ([
       }
     }
   }
-  while (scanners.length) {
+  while (transformedScanners.length) {
     findMatch()
     yield
   }
