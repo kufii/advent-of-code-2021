@@ -32,8 +32,8 @@ export const enhance = function* (
     const fill = alg[0] === '#' ? (grid.fill === '#' ? '.' : '#') : '.'
     const newGrid = new InfiniteGrid(fill)
     const { min, max } = grid.bounds
-    for (let y = min.y - 2; y <= max.y + 2; y++) {
-      for (let x = min.x - 2; x <= max.x + 2; x++) {
+    for (let y = min.y - 1; y <= max.y + 1; y++) {
+      for (let x = min.x - 1; x <= max.x + 1; x++) {
         const cell = alg[parseInt(getEnhancementBit(grid, x, y), 2)]
         if (cell !== fill) newGrid.set(x, y, cell)
       }
