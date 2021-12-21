@@ -1,7 +1,7 @@
 import { h } from 'preact'
 import { Answer } from '/components'
 import input from './input'
-import { nestedLoop, nTimes, range } from '../util'
+import { memoize, nestedLoop, nTimes, range } from '../util'
 
 const parseInput = () =>
   input
@@ -30,32 +30,29 @@ const runDeterministic = (players: number[]) => {
 
 const runQuantum = (players: number[]) => {
   const board = range(1, 10)
-  const cache = new Map<string, number[]>()
 
-  const recurse = (positions: number[], scores: number[], player: number) => {
-    const key = [...positions, ...scores, player].join(',')
-    if (cache.has(key)) return cache.get(key)!
+  const recurse = memoize(
+    (positions: number[], scores: number[], player) => {
+      if (scores.some((n) => n >= 21)) {
+        const lastPlayer = player === 0 ? 1 : 0
+        return lastPlayer === 0 ? [1, 0] : [0, 1]
+      }
 
-    if (scores.some((n) => n >= 21)) {
-      const lastPlayer = player === 0 ? 1 : 0
-      return lastPlayer === 0 ? [1, 0] : [0, 1]
-    }
-
-    const wins = [0, 0]
-    for (const [d1, d2, d3] of nestedLoop(3, 1, 3)) {
-      const newPos = positions.slice()
-      const newScores = scores.slice()
-      newPos[player] += d1 + d2 + d3
-      newPos[player] %= board.length
-      newScores[player] += board[newPos[player]]
-      const [wins1, wins2] = recurse(newPos, newScores, player === 0 ? 1 : 0)
-      wins[0] += wins1
-      wins[1] += wins2
-    }
-    cache.set(key, wins)
-    return wins
-  }
-
+      const wins = [0, 0]
+      for (const [d1, d2, d3] of nestedLoop(3, 1, 3)) {
+        const newPos = positions.slice()
+        const newScores = scores.slice()
+        newPos[player] += d1 + d2 + d3
+        newPos[player] %= board.length
+        newScores[player] += board[newPos[player]]
+        const [wins1, wins2] = recurse(newPos, newScores, player === 0 ? 1 : 0)
+        wins[0] += wins1
+        wins[1] += wins2
+      }
+      return wins
+    },
+    (positions, scores, players) => [...positions, ...scores, players].join('')
+  )
   return recurse(players, [0, 0], 0)
 }
 

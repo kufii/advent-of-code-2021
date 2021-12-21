@@ -268,3 +268,21 @@ export const nestedLoop = function* (
     }
   }
 }
+
+export const memoize = <
+  TParams extends any[],
+  T extends (...args: TParams) => any
+>(
+  fn: T,
+  cacheKeyFn?: (...args: TParams) => string
+) => {
+  const cache = new Map<string, ReturnType<T>>()
+  const cachedFn = (...args: TParams) => {
+    const key = cacheKeyFn ? cacheKeyFn(...args) : args.join(',')
+    if (cache.has(key)) return cache.get(key)!
+    const result = fn(...args)
+    cache.set(key, result)
+    return result
+  }
+  return cachedFn
+}
