@@ -51,7 +51,7 @@ const runQuantum = (players: number[]) => {
       }
       return wins
     },
-    (positions, scores, players) => [...positions, ...scores, players].join('')
+    (positions, scores, players) => [...positions, ...scores, players].join(',')
   )
   return recurse(players, [0, 0], 0)
 }
