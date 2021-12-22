@@ -3,6 +3,21 @@ import { Answer } from '/components'
 import input from './input'
 import { sum } from '../util'
 
+interface Point {
+  x: number
+  y: number
+  z: number
+}
+
+interface Range {
+  from: Point
+  to: Point
+}
+
+interface Step extends Range {
+  type: string
+}
+
 const parseInput = () =>
   input
     .split('\n')
@@ -14,137 +29,119 @@ const parseInput = () =>
     )
     .map(({ type, xFrom, xTo, yFrom, yTo, zFrom, zTo }) => ({
       type,
-      x: { from: Number(xFrom), to: Number(xTo) },
-      y: { from: Number(yFrom), to: Number(yTo) },
-      z: { from: Number(zFrom), to: Number(zTo) }
+      from: { x: Number(xFrom), y: Number(yFrom), z: Number(zFrom) },
+      to: { x: Number(xTo), y: Number(yTo), z: Number(zTo) }
     }))
 
-const key = (x: number, y: number, z: number) => `${x},${y},${z}`
-
-type Range = [
-  { x: number; y: number; z: number },
-  { x: number; y: number; z: number }
-]
-
-interface Point {
-  x: number
-  y: number
-  z: number
-}
-
 const rangeIntersects = (range1: Range, range: Range) =>
-  ((range1[0].x <= range[0].x && range[0].x <= range1[1].x) ||
-    (range[0].x <= range1[0].x && range1[0].x <= range[1].x)) &&
-  ((range1[0].y <= range[0].y && range[0].y <= range1[1].y) ||
-    (range[0].y <= range1[0].y && range1[0].y <= range[1].y)) &&
-  ((range1[0].z <= range[0].z && range[0].z <= range1[1].z) ||
-    (range[0].z <= range1[0].z && range1[0].z <= range[1].z))
+  ((range1.from.x <= range.from.x && range.from.x <= range1.to.x) ||
+    (range.from.x <= range1.from.x && range1.from.x <= range.to.x)) &&
+  ((range1.from.y <= range.from.y && range.from.y <= range1.to.y) ||
+    (range.from.y <= range1.from.y && range1.from.y <= range.to.y)) &&
+  ((range1.from.z <= range.from.z && range.from.z <= range1.to.z) ||
+    (range.from.z <= range1.from.z && range1.from.z <= range.to.z))
 
-const pointInRange = ([from, to]: Range, point: Point) =>
-  point.x >= from.x &&
-  point.x <= to.x &&
-  point.y >= from.y &&
-  point.y <= to.y &&
-  point.z >= from.z &&
-  point.z <= to.z
+const getRangeSize = ({ from, to }: Range) =>
+  (to.x - from.x + 1) * (to.y - from.y + 1) * (to.z - from.z + 1)
 
-const getRanges = () => {
-  const input = parseInput()
+const toSubRange = ({ from, to }: Range, constrain: Range) => ({
+  from: {
+    x: Math.max(from.x, constrain.from.x),
+    y: Math.max(from.y, constrain.from.y),
+    z: Math.max(from.z, constrain.from.z)
+  },
+  to: {
+    x: Math.min(to.x, constrain.to.x),
+    y: Math.min(to.y, constrain.to.y),
+    z: Math.min(to.z, constrain.to.z)
+  }
+})
+
+const getRanges = (steps: Step[]) => {
   const ranges: Range[] = []
-  for (const { type, x, y, z } of input) {
-    const range: Range = [
-      { x: x.from, y: y.from, z: z.from },
-      { x: x.to, y: y.to, z: z.to }
-    ]
+  for (const { type, from, to } of steps) {
     for (let i = 0; i < ranges.length; i++) {
       const r = ranges[i]
-      if (!rangeIntersects(r, range)) continue
+      if (!rangeIntersects(r, { from, to })) continue
 
       const newRanges: Range[] = []
-      if (range[0].y > r[0].y)
-        newRanges.push([r[0], { ...r[1], y: range[0].y - 1 }])
-      if (range[1].y < r[1].y)
-        newRanges.push([{ ...r[0], y: range[1].y + 1 }, r[1]])
-      if (range[0].x > r[0].x)
-        newRanges.push([
-          { ...r[0], y: Math.max(r[0].y, range[0].y) },
-          { ...r[1], y: Math.min(r[1].y, range[1].y), x: range[0].x - 1 }
-        ])
-      if (range[1].x < r[1].x)
-        newRanges.push([
-          { ...r[0], y: Math.max(r[0].y, range[0].y), x: range[1].x + 1 },
-          { ...r[1], y: Math.min(r[1].y, range[1].y) }
-        ])
-      if (range[0].z > r[0].z)
-        newRanges.push([
-          {
-            ...r[0],
-            y: Math.max(r[0].y, range[0].y),
-            x: Math.max(r[0].x, range[0].x)
+      if (from.y > r.from.y)
+        newRanges.push({ from: r.from, to: { ...r.to, y: from.y - 1 } })
+      if (to.y < r.to.y)
+        newRanges.push({ from: { ...r.from, y: to.y + 1 }, to: r.to })
+      if (from.x > r.from.x)
+        newRanges.push({
+          from: { ...r.from, y: Math.max(r.from.y, from.y) },
+          to: { ...r.to, y: Math.min(r.to.y, to.y), x: from.x - 1 }
+        })
+      if (to.x < r.to.x)
+        newRanges.push({
+          from: { ...r.from, y: Math.max(r.from.y, from.y), x: to.x + 1 },
+          to: { ...r.to, y: Math.min(r.to.y, to.y) }
+        })
+      if (from.z > r.from.z)
+        newRanges.push({
+          from: {
+            ...r.from,
+            y: Math.max(r.from.y, from.y),
+            x: Math.max(r.from.x, from.x)
           },
-          {
-            y: Math.min(r[1].y, range[1].y),
-            x: Math.min(r[1].x, range[1].x),
-            z: range[0].z - 1
+          to: {
+            y: Math.min(r.to.y, to.y),
+            x: Math.min(r.to.x, to.x),
+            z: from.z - 1
           }
-        ])
-      if (range[1].z < r[1].z)
-        newRanges.push([
-          {
-            x: Math.max(r[0].x, range[0].x),
-            y: Math.max(r[0].y, range[0].y),
-            z: range[1].z + 1
+        })
+      if (to.z < r.to.z)
+        newRanges.push({
+          from: {
+            x: Math.max(r.from.x, from.x),
+            y: Math.max(r.from.y, from.y),
+            z: to.z + 1
           },
-          {
-            ...r[1],
-            x: Math.min(r[1].x, range[1].x),
-            y: Math.min(r[1].y, range[1].y)
+          to: {
+            ...r.to,
+            x: Math.min(r.to.x, to.x),
+            y: Math.min(r.to.y, to.y)
           }
-        ])
+        })
 
       ranges.splice(i, 1, ...newRanges)
       if (!newRanges.length) i--
     }
     if (type === 'on') {
-      ranges.push(range)
+      ranges.push({ from, to })
     }
   }
   return ranges
 }
 
 export const Part1 = () => {
-  const ranges = getRanges()
-
-  let numOn = 0
-  for (let x = -50; x <= 50; x++) {
-    for (let y = -50; y <= 50; y++) {
-      for (let z = -50; z <= 50; z++) {
-        if (ranges.some((r) => pointInRange(r, { x, y, z }))) numOn++
-      }
-    }
+  const ranges = getRanges(parseInput())
+  const rangeToCheck = {
+    from: { x: -50, y: -50, z: -50 },
+    to: { x: 50, y: 50, z: 50 }
   }
+  const subRanges = ranges
+    .filter((r) => rangeIntersects(r, rangeToCheck))
+    .map((range) => toSubRange(range, rangeToCheck))
+  const numOn = subRanges.map(getRangeSize).reduce(sum)
 
   return (
     <p>
-      Hello world <Answer>{numOn}</Answer>
+      After the reboot steps, <Answer>{numOn}</Answer> cubes are on in the
+      initialization procedure region.
     </p>
   )
 }
 
 export const Part2 = () => {
-  const ranges = getRanges()
+  const ranges = getRanges(parseInput())
+  const numOn = ranges.map(getRangeSize).reduce(sum)
 
   return (
     <p>
-      Hello world{' '}
-      <Answer>
-        {ranges
-          .map(
-            ([from, to]) =>
-              (to.x - from.x + 1) * (to.y - from.y + 1) * (to.z - from.z + 1)
-          )
-          .reduce(sum)}
-      </Answer>
+      After the reboot steps, <Answer>{numOn}</Answer> cubes are on.
     </p>
   )
 }
