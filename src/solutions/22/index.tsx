@@ -107,7 +107,7 @@ const getRanges = (steps: Step[]) => {
         })
 
       ranges.splice(i, 1, ...newRanges)
-      if (!newRanges.length) i--
+      i += newRanges.length - 1
     }
     if (type === 'on') {
       ranges.push({ from, to })
