@@ -744,6 +744,7 @@ strong {
 .header__3YKgi {
   display: grid;
   grid-template-columns: auto auto 1fr auto;
+  height: 3.5rem;
   position: -webkit-sticky;
   position: sticky;
   top: 0;
@@ -805,17 +806,19 @@ strong {
 
 .sideNav__x3p1x.active__lwSsu {
   position: fixed;
-  top: 0;
+  top: 3.5rem;
   left: 0;
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.4);
+  -webkit-user-select: all;
+          user-select: all;
   z-index: var(--z-index-overlay);
 }
 
 .sideNav__x3p1x nav {
   position: fixed;
-  top: 0;
+  top: 3.5rem;
   bottom: 0;
   left: 0;
   width: 20rem;
@@ -971,4 +974,4 @@ strong {
 }
 
 
-/*# sourceMappingURL=ssr-bundle.60744.css.map*/
+/*# sourceMappingURL=ssr-bundle.078f1.css.map*/
