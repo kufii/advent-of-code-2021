@@ -72,23 +72,23 @@ const getRanges = (steps: Step[]) => {
       if (from.x > r.from.x)
         newRanges.push({
           from: { ...r.from, y: Math.max(r.from.y, from.y) },
-          to: { ...r.to, y: Math.min(r.to.y, to.y), x: from.x - 1 }
+          to: { ...r.to, x: from.x - 1, y: Math.min(r.to.y, to.y) }
         })
       if (to.x < r.to.x)
         newRanges.push({
-          from: { ...r.from, y: Math.max(r.from.y, from.y), x: to.x + 1 },
+          from: { ...r.from, x: to.x + 1, y: Math.max(r.from.y, from.y) },
           to: { ...r.to, y: Math.min(r.to.y, to.y) }
         })
       if (from.z > r.from.z)
         newRanges.push({
           from: {
             ...r.from,
-            y: Math.max(r.from.y, from.y),
-            x: Math.max(r.from.x, from.x)
+            x: Math.max(r.from.x, from.x),
+            y: Math.max(r.from.y, from.y)
           },
           to: {
-            y: Math.min(r.to.y, to.y),
             x: Math.min(r.to.x, to.x),
+            y: Math.min(r.to.y, to.y),
             z: from.z - 1
           }
         })
