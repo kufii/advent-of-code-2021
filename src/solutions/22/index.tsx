@@ -34,12 +34,13 @@ const parseInput = () =>
     }))
 
 const rangeIntersects = (range1: Range, range2: Range) =>
-  ((range1.from.x <= range2.from.x && range2.from.x <= range1.to.x) ||
-    (range2.from.x <= range1.from.x && range1.from.x <= range2.to.x)) &&
-  ((range1.from.y <= range2.from.y && range2.from.y <= range1.to.y) ||
-    (range2.from.y <= range1.from.y && range1.from.y <= range2.to.y)) &&
-  ((range1.from.z <= range2.from.z && range2.from.z <= range1.to.z) ||
-    (range2.from.z <= range1.from.z && range1.from.z <= range2.to.z))
+  (['x', 'y', 'z'] as const).every(
+    (axis) =>
+      (range1.from[axis] <= range2.from[axis] &&
+        range2.from[axis] <= range1.to[axis]) ||
+      (range2.from[axis] <= range1.from[axis] &&
+        range1.from[axis] <= range2.to[axis])
+  )
 
 const getRangeSize = ({ from, to }: Range) =>
   (to.x - from.x + 1) * (to.y - from.y + 1) * (to.z - from.z + 1)
