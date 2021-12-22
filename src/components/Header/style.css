@@ -1,6 +1,7 @@
 .header {
   display: grid;
   grid-template-columns: auto auto 1fr auto;
+  height: 3.5rem;
   position: sticky;
   top: 0;
   align-items: center;

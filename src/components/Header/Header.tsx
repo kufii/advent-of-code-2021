@@ -7,7 +7,7 @@ import style from './style.css'
 export const Header = () => {
   const navOpen = useStore((s) => s.navOpen)
   return (
-    <header class={style.header}>
+    <header onClick={() => setNavOpen(false)} class={style.header}>
       <button
         class={classNames(style.navBtn, style.skipContent)}
         onClick={() =>

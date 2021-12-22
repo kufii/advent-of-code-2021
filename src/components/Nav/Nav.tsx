@@ -10,12 +10,11 @@ export const Nav = () => {
     <div
       onClick={() => setNavOpen(false)}
       class={classNames(style.sideNav, navOpen && style.active)}
+      role="dialog"
+      aria-modal
+      aria-hidden={!navOpen}
     >
-      <nav
-        onClick={(e) => {
-          e.stopImmediatePropagation()
-        }}
-      >
+      <nav onClick={(e) => e.stopImmediatePropagation()}>
         <ul>
           {range(1, 25).map((d) => (
             <li key={d}>
