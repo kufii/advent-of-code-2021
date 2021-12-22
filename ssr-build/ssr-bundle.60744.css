@@ -743,7 +743,7 @@ strong {
 
 .header__3YKgi {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto auto 1fr auto;
   position: -webkit-sticky;
   position: sticky;
   top: 0;
@@ -783,6 +783,19 @@ strong {
 
 .navBtn__QwRts.active__Yg9yU {
   background: rgba(0, 0, 0, 0.4);
+}
+
+.skipContent__QzQqF {
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: padding 0.1s, width 0.3s 0.1s;
+}
+
+.skipContent__QzQqF:focus {
+  width: auto;
+  padding: 1rem;
 }
 
 .container__HPXMh {
@@ -958,4 +971,4 @@ strong {
 }
 
 
-/*# sourceMappingURL=ssr-bundle.fd655.css.map*/
+/*# sourceMappingURL=ssr-bundle.60744.css.map*/
