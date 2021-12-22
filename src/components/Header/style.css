@@ -1,6 +1,6 @@
 .header {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto auto 1fr auto;
   position: sticky;
   top: 0;
   align-items: center;
@@ -37,4 +37,17 @@
 
 .navBtn.active {
   background: rgba(0, 0, 0, 0.4);
+}
+
+.skipContent {
+  width: 0;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: padding 0.1s, width 0.3s 0.1s;
+}
+
+.skipContent:focus {
+  width: auto;
+  padding: 1rem;
 }

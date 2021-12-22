@@ -21,7 +21,7 @@ export const App = () => {
     <div id="preact_root" class={style.container}>
       <Header />
       <Nav />
-      <main class={style.pageContainer}>
+      <main id="main_content" class={style.pageContainer}>
         <Router history={history}>
           <Route path="/:day?" component={ViewDay} />
           <NotFound default />

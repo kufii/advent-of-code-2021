@@ -1,13 +1,27 @@
 import { h } from 'preact'
 import { Icon } from '/components'
 import { setNavOpen, useStore } from '/store'
-import { newTab } from '/shared/web-utilities/util'
+import { classNames, newTab } from '/shared/web-utilities/util'
 import style from './style.css'
 
 export const Header = () => {
   const navOpen = useStore((s) => s.navOpen)
   return (
     <header class={style.header}>
+      <button
+        class={classNames(style.navBtn, style.skipContent)}
+        onClick={() =>
+          (
+            document
+              .getElementById('main_content')
+              ?.querySelector(
+                'a:not([disabled]), button:not([disabled]), input[type=text]:not([disabled]), [tabindex]:not([disabled]):not([tabindex="-1"])'
+              ) as HTMLElement
+          )?.focus()
+        }
+      >
+        Skip nav
+      </button>
       <button
         class={style.navBtn}
         onClick={(e) => {
