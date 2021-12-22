@@ -33,13 +33,13 @@ const parseInput = () =>
       to: { x: Number(xTo), y: Number(yTo), z: Number(zTo) }
     }))
 
-const rangeIntersects = (range1: Range, range: Range) =>
-  ((range1.from.x <= range.from.x && range.from.x <= range1.to.x) ||
-    (range.from.x <= range1.from.x && range1.from.x <= range.to.x)) &&
-  ((range1.from.y <= range.from.y && range.from.y <= range1.to.y) ||
-    (range.from.y <= range1.from.y && range1.from.y <= range.to.y)) &&
-  ((range1.from.z <= range.from.z && range.from.z <= range1.to.z) ||
-    (range.from.z <= range1.from.z && range1.from.z <= range.to.z))
+const rangeIntersects = (range1: Range, range2: Range) =>
+  ((range1.from.x <= range2.from.x && range2.from.x <= range1.to.x) ||
+    (range2.from.x <= range1.from.x && range1.from.x <= range2.to.x)) &&
+  ((range1.from.y <= range2.from.y && range2.from.y <= range1.to.y) ||
+    (range2.from.y <= range1.from.y && range1.from.y <= range2.to.y)) &&
+  ((range1.from.z <= range2.from.z && range2.from.z <= range1.to.z) ||
+    (range2.from.z <= range1.from.z && range1.from.z <= range2.to.z))
 
 const getRangeSize = ({ from, to }: Range) =>
   (to.x - from.x + 1) * (to.y - from.y + 1) * (to.z - from.z + 1)
