@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[2],{F46F:function(t,n,e){"use strict";e.r(n),e.d(n,"default",(function(){return a}));var c=e("hosL"),o=e("bgFo"),u="container__Vv0uF";const a=()=>Object(c.h)("div",{class:u},Object(c.h)("h1",null,"Error 404"),Object(c.h)("p",null,"That page doesn't exist."),Object(c.h)("div",null,Object(c.h)(o.c,{url:"#",plain:!0,compact:!0},"Return to home page")))}}]);
+//# sourceMappingURL=route-NotFound.chunk.534a6.esm.js.map
