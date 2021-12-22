@@ -57,60 +57,80 @@ const toSubRange = ({ from, to }: Range, constrain: Range) => ({
   }
 })
 
+const removeRange = (range: Range, remove: Range) => {
+  const newRanges = []
+
+  if (remove.from.y > range.from.y)
+    newRanges.push({
+      from: range.from,
+      to: { ...range.to, y: remove.from.y - 1 }
+    })
+  if (remove.to.y < range.to.y)
+    newRanges.push({
+      from: { ...range.from, y: remove.to.y + 1 },
+      to: range.to
+    })
+  if (remove.from.x > range.from.x)
+    newRanges.push({
+      from: { ...range.from, y: Math.max(range.from.y, remove.from.y) },
+      to: {
+        ...range.to,
+        x: remove.from.x - 1,
+        y: Math.min(range.to.y, remove.to.y)
+      }
+    })
+  if (remove.to.x < range.to.x)
+    newRanges.push({
+      from: {
+        ...range.from,
+        x: remove.to.x + 1,
+        y: Math.max(range.from.y, remove.from.y)
+      },
+      to: { ...range.to, y: Math.min(range.to.y, remove.to.y) }
+    })
+  if (remove.from.z > range.from.z)
+    newRanges.push({
+      from: {
+        ...range.from,
+        x: Math.max(range.from.x, remove.from.x),
+        y: Math.max(range.from.y, remove.from.y)
+      },
+      to: {
+        x: Math.min(range.to.x, remove.to.x),
+        y: Math.min(range.to.y, remove.to.y),
+        z: remove.from.z - 1
+      }
+    })
+  if (remove.to.z < range.to.z)
+    newRanges.push({
+      from: {
+        x: Math.max(range.from.x, remove.from.x),
+        y: Math.max(range.from.y, remove.from.y),
+        z: remove.to.z + 1
+      },
+      to: {
+        ...range.to,
+        x: Math.min(range.to.x, remove.to.x),
+        y: Math.min(range.to.y, remove.to.y)
+      }
+    })
+
+  return newRanges
+}
+
 const getRanges = (steps: Step[]) => {
   const ranges: Range[] = []
-  for (const { type, from, to } of steps) {
+  for (const { type, ...range } of steps) {
     for (let i = 0; i < ranges.length; i++) {
       const r = ranges[i]
-      if (!rangeIntersects(r, { from, to })) continue
+      if (!rangeIntersects(r, range)) continue
 
-      const newRanges: Range[] = []
-      if (from.y > r.from.y)
-        newRanges.push({ from: r.from, to: { ...r.to, y: from.y - 1 } })
-      if (to.y < r.to.y)
-        newRanges.push({ from: { ...r.from, y: to.y + 1 }, to: r.to })
-      if (from.x > r.from.x)
-        newRanges.push({
-          from: { ...r.from, y: Math.max(r.from.y, from.y) },
-          to: { ...r.to, x: from.x - 1, y: Math.min(r.to.y, to.y) }
-        })
-      if (to.x < r.to.x)
-        newRanges.push({
-          from: { ...r.from, x: to.x + 1, y: Math.max(r.from.y, from.y) },
-          to: { ...r.to, y: Math.min(r.to.y, to.y) }
-        })
-      if (from.z > r.from.z)
-        newRanges.push({
-          from: {
-            ...r.from,
-            x: Math.max(r.from.x, from.x),
-            y: Math.max(r.from.y, from.y)
-          },
-          to: {
-            x: Math.min(r.to.x, to.x),
-            y: Math.min(r.to.y, to.y),
-            z: from.z - 1
-          }
-        })
-      if (to.z < r.to.z)
-        newRanges.push({
-          from: {
-            x: Math.max(r.from.x, from.x),
-            y: Math.max(r.from.y, from.y),
-            z: to.z + 1
-          },
-          to: {
-            ...r.to,
-            x: Math.min(r.to.x, to.x),
-            y: Math.min(r.to.y, to.y)
-          }
-        })
-
+      const newRanges = removeRange(r, range)
       ranges.splice(i, 1, ...newRanges)
       i += newRanges.length - 1
     }
     if (type === 'on') {
-      ranges.push({ from, to })
+      ranges.push(range)
     }
   }
   return ranges
