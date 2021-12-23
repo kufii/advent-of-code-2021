@@ -24,6 +24,9 @@ export const make2dArray = <T>(ySize: number, xSize: number, fill?: T): T[][] =>
 export const output2dArray = (arr: (string | number)[][]) =>
   arr.map((line) => line.join('')).join('\n')
 
+export const clone2dArray = <T>(arr: T[][]) =>
+  arr.slice().map((line) => line.slice())
+
 export const max = (a: number, b: number) => (b > a ? b : a)
 
 export const min = (a: number, b: number) => (b < a ? b : a)

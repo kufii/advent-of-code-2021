@@ -1,23 +1,28 @@
-import { h } from 'preact'
-import { Answer } from '/components'
+import { h, Fragment } from 'preact'
+import structuredClone from '@ungap/structured-clone'
+import { Answer, Visualization } from '/components'
 import input from './input'
 import {
+  clone2dArray,
   dijkstra,
   getAdjacent,
   iterate2dArray,
   keyToPoint,
-  min,
+  minBy,
+  output2dArray,
   parse2dArray,
   Point,
   pointToKey,
   range,
   sortBy
 } from '../util'
-import { useEffect, useState } from 'preact/hooks'
+import { useEffect, useRef, useState } from 'preact/hooks'
 import { setIntervalImmediate } from '/shared/web-utilities/util'
+import { useStore } from '/store'
 
 enum Cells {
-  WALL = '#'
+  WALL = '#',
+  EMPTY = '.'
 }
 
 interface Amphipod extends Point {
@@ -39,6 +44,10 @@ const energy: Record<string, number> = {
   C: 100,
   D: 1000
 }
+
+type TraverseReturn = { distance: number; path: [string, string][] }
+
+type Paths = Record<string, Record<string, ReturnType<typeof dijkstra>>>
 
 const getAmphipods = (grid: string[][]) => {
   const array: Amphipod[] = []
@@ -66,7 +75,7 @@ const getPathsBetween = (grid: string[][], spots: Record<string, Point>) =>
           {} as Record<string, ReturnType<typeof dijkstra>>
         )
     }),
-    {} as Record<string, Record<string, ReturnType<typeof dijkstra>>>
+    {} as Paths
   )
 
 const traverse = function* (grid: string[][], yieldEvery = 1000) {
@@ -83,7 +92,7 @@ const traverse = function* (grid: string[][], yieldEvery = 1000) {
     ...[3, 5, 7, 9].flatMap((x) => range(2, maxY).map((y) => ({ x, y })))
   ].reduce(
     (acc, { x, y }, id) => ({ ...acc, [id]: { x, y } }),
-    {} as Record<string, { x: number; y: number }>
+    {} as Record<string, Point>
   )
 
   const getSpotAt = ({ x, y }: Point) =>
@@ -91,11 +100,12 @@ const traverse = function* (grid: string[][], yieldEvery = 1000) {
 
   const pathsBetween = getPathsBetween(grid, spots)
 
-  const cache = new Map<string, number>()
+  const cache = new Map<string, TraverseReturn>()
   const recurse = function* (
-    positions: Record<string, { type: string; x: number; y: number }>,
+    positions: Record<string, Amphipod>,
+    path: [string, string][] = [],
     distance = 0
-  ): Generator<number | undefined> {
+  ): Generator<TraverseReturn | undefined> {
     const isAmphipodAt = ({ x, y }: Point, type?: string) =>
       Object.values(positions).some(
         (p) => p.x === x && p.y === y && (!type || p.type === type)
@@ -134,13 +144,14 @@ const traverse = function* (grid: string[][], yieldEvery = 1000) {
           positions[id].x = targetX
           positions[id].y = targetY
           distance += pathsBetween[from][to].distance! * energy[pos.type]
+          path.push([from, to])
         }
       }
       if (!found) break
     }
 
     if (Object.values(positions).every(({ type, x }) => slots[type] === x)) {
-      return yield distance
+      return yield { distance, path }
     }
 
     const cacheKey = Object.entries(positions)
@@ -148,9 +159,15 @@ const traverse = function* (grid: string[][], yieldEvery = 1000) {
       .map(([key, value]) => `${key},${value.x},${value.y}`)
       .join('\n')
 
-    if (cache.has(cacheKey)) return yield cache.get(cacheKey)! + distance
+    if (cache.has(cacheKey)) {
+      const c = cache.get(cacheKey)!
+      return yield {
+        distance: distance + c.distance,
+        path: [...path, ...c.path]
+      }
+    }
 
-    const distances: number[] = []
+    const distances: TraverseReturn[] = []
     const notInHallway = Object.entries(positions).filter(
       (p) => p[1].y !== 1 && !isInPlace(p[0])
     )
@@ -160,7 +177,7 @@ const traverse = function* (grid: string[][], yieldEvery = 1000) {
         (id) => spots[id].y === 1 && canTraverse(from, id)
       )
       for (const hallway of hallways) {
-        const newPos = JSON.parse(JSON.stringify(positions))
+        const newPos = structuredClone(positions)
         newPos[id] = {
           ...newPos[id],
           x: spots[hallway].x,
@@ -168,6 +185,7 @@ const traverse = function* (grid: string[][], yieldEvery = 1000) {
         }
         for (const out of recurse(
           newPos,
+          [...path, [from, hallway]],
           distance + pathsBetween[from][hallway].distance! * energy[pos.type]
         )) {
           yield
@@ -179,62 +197,119 @@ const traverse = function* (grid: string[][], yieldEvery = 1000) {
       }
     }
 
-    const result = distances.reduce(min, Infinity)
-    cache.set(cacheKey, result - distance)
+    const result = distances.reduce(
+      minBy((d) => d.distance),
+      { distance: Infinity, path }
+    )
+    cache.set(cacheKey, {
+      distance: result.distance - distance,
+      path: result.path.slice(path.length)
+    })
     yield result
   }
 
   let i = 0
-  let result = Infinity
+  let result: TraverseReturn | undefined
   for (const out of recurse(
     getAmphipods(grid).reduce(
       (acc, p, i) => ({ ...acc, [i]: p }),
       {} as Record<string, Amphipod>
-    ),
-    0
+    )
   )) {
     i++
     if (i % yieldEvery === 0) yield
     if (out) result = out
   }
-  yield result
+  if (result) yield { ...result, pathsBetween }
 }
 
 const useSolution = (grid: string[][]) => {
-  const [result, setResult] = useState<number>()
+  const gridRef = useRef(grid)
+  const showVisualization = useStore((s) => s.showVisualization)
+  const [distance, setDistance] = useState<number>()
+  const [result, setResult] = useState<
+    TraverseReturn & { pathsBetween: Paths }
+  >()
+  const [visualization, setVisualization] = useState<string>()
+
   useEffect(() => {
-    const gen = traverse(grid)
+    setResult(undefined)
+    setDistance(undefined)
+
+    const gen = traverse(gridRef.current)
     const id = setIntervalImmediate(() => {
       const { value, done } = gen.next()
-      if (value) setResult(value)
+      if (value) {
+        setResult(value)
+        setDistance(value.distance)
+      }
       if (done) clearInterval(id)
     }, 0)
+
     return () => clearInterval(id)
-  }, [grid])
-  return result
+  }, [])
+
+  useEffect(() => {
+    setVisualization(undefined)
+    if (!showVisualization || !result) return
+    const grid = clone2dArray(gridRef.current)
+    const { path, pathsBetween } = result
+
+    const visualize = function* () {
+      yield output2dArray(grid)
+      for (const [from, to] of path) {
+        const steps = pathsBetween[from][to].path!
+        let prev = keyToPoint(steps[0])
+        for (const step of steps.slice(1)) {
+          const point = keyToPoint(step)
+          const type = grid[prev.y][prev.x]
+          grid[prev.y][prev.x] = Cells.EMPTY
+          prev = point
+          grid[point.y][point.x] = type
+          yield output2dArray(grid)
+        }
+      }
+    }
+    const gen = visualize()
+    const id = setIntervalImmediate(() => {
+      const { value, done } = gen.next()
+      if (value) setVisualization(value)
+      if (done) clearInterval(id)
+    }, 200)
+
+    return () => clearInterval(id)
+  }, [showVisualization, result])
+
+  return { distance, visualization }
 }
 
 export const Part1 = () => {
   const input = parseInput()
-  const result = useSolution(input)
-  if (!result) return <p>Running... This takes a long time...</p>
+  const { distance, visualization } = useSolution(input)
+  if (!distance) return <p>Running... This takes a long time...</p>
   return (
-    <p>
-      The least energy required to organize the amphipods is{' '}
-      <Answer>{result}</Answer>.
-    </p>
+    <>
+      <p>
+        The least energy required to organize the amphipods is{' '}
+        <Answer>{distance}</Answer>.
+      </p>
+      <Visualization>{visualization}</Visualization>
+    </>
   )
 }
 
 export const Part2 = () => {
   const input = parseInput()
   input.splice(3, 0, ...['  #D#C#B#A#', '  #D#B#A#C#'].map((s) => [...s]))
-  const result = useSolution(input)
-  if (!result) return <p>Running... This takes a long time...</p>
+  const { distance, visualization } = useSolution(input)
+  if (!distance) return <p>Running... This takes a long time...</p>
   return (
-    <p>
-      The least energy required to organize the amphipods after unfolding the
-      diagram is <Answer>{result}</Answer>.
-    </p>
+    <>
+      <p>
+        The least energy required to organize the amphipods after unfolding the
+        diagram is <Answer>{distance}</Answer>.
+      </p>
+      <Visualization>{visualization}</Visualization>
+    </>
   )
 }
