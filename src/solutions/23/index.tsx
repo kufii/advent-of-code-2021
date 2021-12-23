@@ -13,6 +13,8 @@ import {
   range,
   sortBy
 } from '../util'
+import { useEffect, useState } from 'preact/hooks'
+import { setIntervalImmediate } from '/shared/web-utilities/util'
 
 enum Cells {
   WALL = '#'
@@ -67,7 +69,7 @@ const getPathsBetween = (grid: string[][], spots: Record<string, Point>) =>
     {} as Record<string, Record<string, ReturnType<typeof dijkstra>>>
   )
 
-const traverse = (grid: string[][]) => {
+const traverse = function* (grid: string[][], yieldEvery = 1000) {
   const maxY = grid.length - 2
 
   const spots = [
@@ -90,10 +92,10 @@ const traverse = (grid: string[][]) => {
   const pathsBetween = getPathsBetween(grid, spots)
 
   const cache = new Map<string, number>()
-  const recurse = (
+  const recurse = function* (
     positions: Record<string, { type: string; x: number; y: number }>,
     distance = 0
-  ) => {
+  ): Generator<number | undefined> {
     const isAmphipodAt = ({ x, y }: Point, type?: string) =>
       Object.values(positions).some(
         (p) => p.x === x && p.y === y && (!type || p.type === type)
@@ -138,7 +140,7 @@ const traverse = (grid: string[][]) => {
     }
 
     if (Object.values(positions).every(({ type, x }) => slots[type] === x)) {
-      return distance
+      return yield distance
     }
 
     const cacheKey = Object.entries(positions)
@@ -146,7 +148,7 @@ const traverse = (grid: string[][]) => {
       .map(([key, value]) => `${key},${value.x},${value.y}`)
       .join('\n')
 
-    if (cache.has(cacheKey)) return cache.get(cacheKey)! + distance
+    if (cache.has(cacheKey)) return yield cache.get(cacheKey)! + distance
 
     const distances: number[] = []
     const notInHallway = Object.entries(positions).filter(
@@ -164,32 +166,58 @@ const traverse = (grid: string[][]) => {
           x: spots[hallway].x,
           y: spots[hallway].y
         }
-        distances.push(
-          recurse(
-            newPos,
-            distance + pathsBetween[from][hallway].distance! * energy[pos.type]
-          )
-        )
+        for (const out of recurse(
+          newPos,
+          distance + pathsBetween[from][hallway].distance! * energy[pos.type]
+        )) {
+          yield
+          if (out) {
+            distances.push(out)
+            break
+          }
+        }
       }
     }
 
     const result = distances.reduce(min, Infinity)
     cache.set(cacheKey, result - distance)
-    return result
+    yield result
   }
 
-  return recurse(
+  let i = 0
+  let result = Infinity
+  for (const out of recurse(
     getAmphipods(grid).reduce(
       (acc, p, i) => ({ ...acc, [i]: p }),
       {} as Record<string, Amphipod>
     ),
     0
-  )
+  )) {
+    i++
+    if (i % yieldEvery === 0) yield
+    if (out) result = out
+  }
+  yield result
+}
+
+const useSolution = (grid: string[][]) => {
+  const [result, setResult] = useState<number>()
+  useEffect(() => {
+    const gen = traverse(grid)
+    const id = setIntervalImmediate(() => {
+      const { value, done } = gen.next()
+      if (value) setResult(value)
+      if (done) clearInterval(id)
+    }, 0)
+    return () => clearInterval(id)
+  }, [grid])
+  return result
 }
 
 export const Part1 = () => {
   const input = parseInput()
-  const result = traverse(input)
+  const result = useSolution(input)
+  if (!result) return <p>Running... This takes a long time...</p>
   return (
     <p>
       The least energy required to organize the amphipods is{' '}
@@ -201,7 +229,8 @@ export const Part1 = () => {
 export const Part2 = () => {
   const input = parseInput()
   input.splice(3, 0, ...['  #D#C#B#A#', '  #D#B#A#C#'].map((s) => [...s]))
-  const result = traverse(input)
+  const result = useSolution(input)
+  if (!result) return <p>Running... This takes a long time...</p>
   return (
     <p>
       The least energy required to organize the amphipods after unfolding the
