@@ -3,7 +3,6 @@ import structuredClone from '@ungap/structured-clone'
 import { Answer, Visualization } from '/components'
 import input from './input'
 import {
-  clone2dArray,
   dijkstra,
   getAdjacent,
   iterate2dArray,
@@ -252,7 +251,7 @@ const useSolution = (grid: string[][]) => {
   useEffect(() => {
     setVisualization(undefined)
     if (!showVisualization || !result) return
-    const grid = clone2dArray(gridRef.current)
+    const grid = structuredClone(gridRef.current)
     const { path, pathsBetween } = result
 
     const visualize = function* () {
