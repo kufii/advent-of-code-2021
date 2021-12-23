@@ -1,3 +1,5 @@
+import { serialize } from '@ungap/structured-clone'
+
 export type Truthy<T> = T extends false | '' | 0 | null | undefined ? never : T
 
 export const truthy = <T>(value: T): value is Truthy<T> => Boolean(value)
@@ -273,13 +275,11 @@ export const memoize = <
   TParams extends any[],
   T extends (...args: TParams) => any
 >(
-  fn: T,
-  cacheKeyFn?: (...args: TParams) => string
+  fn: T
 ) => {
   const cache = new Map<string, ReturnType<T>>()
   return (...args: TParams) => {
-    const key = cacheKeyFn ? cacheKeyFn(...args) : args.join(',')
-    console.log(key)
+    const key = JSON.stringify(serialize(args))
     if (cache.has(key)) return cache.get(key)!
     const result = fn(...args)
     cache.set(key, result)

@@ -1,5 +1,5 @@
 import { h, Fragment } from 'preact'
-import structuredClone from '@ungap/structured-clone'
+import structuredClone, { serialize } from '@ungap/structured-clone'
 import { Answer, Visualization } from '/components'
 import input from './input'
 import {
@@ -12,8 +12,7 @@ import {
   parse2dArray,
   Point,
   pointToKey,
-  range,
-  sortBy
+  range
 } from '../util'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { setIntervalImmediate } from '/shared/web-utilities/util'
@@ -153,11 +152,7 @@ const traverse = function* (grid: string[][], yieldEvery = 1000) {
       return yield { distance, path }
     }
 
-    const cacheKey = Object.entries(positions)
-      .sort(sortBy(([key]) => Number(key)))
-      .map(([key, value]) => `${key},${value.x},${value.y}`)
-      .join('\n')
-
+    const cacheKey = JSON.stringify(serialize(positions))
     if (cache.has(cacheKey)) {
       const c = cache.get(cacheKey)!
       return yield {
