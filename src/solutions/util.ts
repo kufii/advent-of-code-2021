@@ -92,7 +92,7 @@ export const keyToPoint = (key: string) => {
 
 export const getAdjacent = (
   { x, y }: Point,
-  map: any[][] | Point,
+  map?: any[][] | Point,
   diagonal = false
 ) =>
   [
@@ -114,8 +114,8 @@ export const getAdjacent = (
       ({ x, y }) =>
         x >= 0 &&
         y >= 0 &&
-        y < (Array.isArray(map) ? map.length : map.y) &&
-        x < (Array.isArray(map) ? map[0].length : map.x)
+        (!map || y < (Array.isArray(map) ? map.length : map.y)) &&
+        (!map || x < (Array.isArray(map) ? map[0].length : map.x))
     )
 
 export const parse2dArray = <T>(str: string, cbMap: (c: string) => T) =>
@@ -279,6 +279,7 @@ export const memoize = <
   const cache = new Map<string, ReturnType<T>>()
   return (...args: TParams) => {
     const key = cacheKeyFn ? cacheKeyFn(...args) : args.join(',')
+    console.log(key)
     if (cache.has(key)) return cache.get(key)!
     const result = fn(...args)
     cache.set(key, result)
