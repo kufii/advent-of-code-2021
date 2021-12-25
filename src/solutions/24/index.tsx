@@ -1,53 +1,61 @@
 import { h } from 'preact'
 import { Answer } from '/components'
 import { maxBy, minBy, range } from '../util'
+import input from './input'
 
-// only for my input
-const getModels = () => {
-  const good: string[] = []
-  for (const d0 of range(5, 9)) {
-    for (const d1 of range(1, 7)) {
-      for (const d2 of range(6, 9)) {
-        const d3 = 1
-        const d4 = 9
-        for (const d5 of range(3, 9)) {
-          for (const d6 of range(3, 9)) {
-            const d7 = d6 - 2
-            for (const d8 of range(1, 2)) {
-              const d9 = d8 + 7
-              const d10 = d5
-              const d11 = d2 - 5
-              const d12 = d1 + 2
-              const d13 = d0 - 4
-              good.push(
-                [
-                  d0,
-                  d1,
-                  d2,
-                  d3,
-                  d4,
-                  d5,
-                  d6,
-                  d7,
-                  d8,
-                  d9,
-                  d10,
-                  d11,
-                  d12,
-                  d13
-                ].join('')
-              )
-            }
-          }
-        }
-      }
+const parseInput = () =>
+  input
+    .split('inp w')
+    .map((s) => s.trim())
+    .filter(Boolean)
+
+const analyze = (blocks: string[]) => {
+  const offsets = []
+  const differences = []
+  for (let i = 0; i < blocks.length; i++) {
+    const block = blocks[i]
+    if (block.match(/div z 26/u)) {
+      const { offset } = block.match(/div z 26\nadd x (?<offset>[-\d]+)/u)!
+        .groups!
+      const { index, n } = offsets.pop()!
+      differences.push({
+        from: index,
+        to: i,
+        difference: Number(offset) + n
+      })
+    } else {
+      const { offset } = block.match(/add y w\nadd y (?<offset>[-\d]+)/u)!
+        .groups!
+      offsets.push({ index: i, n: Number(offset) })
     }
   }
-  return good
+  return differences
+}
+
+const getModels = (
+  differences: { from: number; to: number; difference: number }[]
+) => {
+  let models = ['']
+  for (const i of range(0, 13)) {
+    const { from, difference } = differences.find(
+      (d) => d.from === i || d.to === i
+    )!
+    models =
+      i === from
+        ? models.flatMap((s) =>
+            range(
+              difference < 0 ? Math.abs(difference) + 1 : 1,
+              difference < 0 ? 9 : 9 - difference
+            ).map((n) => s + n)
+          )
+        : models.map((s) => s + (Number(s[from]) + difference))
+  }
+  return models
 }
 
 export const Part1 = () => {
-  const max = getModels().reduce(maxBy(Number))
+  const input = parseInput()
+  const max = getModels(analyze(input)).reduce(maxBy(Number))
 
   return (
     <p>
@@ -57,11 +65,12 @@ export const Part1 = () => {
 }
 
 export const Part2 = () => {
-  const min = getModels().reduce(minBy(Number))
+  const input = parseInput()
+  const min = getModels(analyze(input)).reduce(minBy(Number))
 
   return (
     <p>
-      The smallest model number accepted by MONAD is <Answer>{min}</Answer>.
+      The largest model number accepted by MONAD is <Answer>{min}</Answer>.
     </p>
   )
 }
