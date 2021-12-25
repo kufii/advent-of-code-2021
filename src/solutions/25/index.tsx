@@ -1,14 +1,15 @@
-import { h } from 'preact'
-import { Answer } from '/components'
+import { h, Fragment } from 'preact'
+import { Answer, Visualization } from '/components'
 import structuredClone from '@ungap/structured-clone'
-import { iterate2dArray, parse2dArray } from '../util'
+import { iterate2dArray, output2dArray, parse2dArray } from '../util'
+import { useEffect, useState } from 'preact/hooks'
+import { setIntervalImmediate } from '/shared/web-utilities/util'
+import { useStore } from '/store'
 import input from './input'
 
 const parseInput = () => parse2dArray(input, String)
 
-export const Part1 = () => {
-  let grid = parseInput()
-
+const simulate = function* (grid: string[][]) {
   const step = () => {
     let moved = false
     const move = (dir: string) => {
@@ -31,15 +32,54 @@ export const Part1 = () => {
     move('v')
     return moved
   }
-
-  let n = 0
   do {
-    n++
+    yield grid
   } while (step())
+}
+
+export const Part1 = () => {
+  const showVisualization = useStore((s) => s.showVisualization)
+  const [steps, setSteps] = useState(0)
+  const [done, setDone] = useState(false)
+  const [output, setOutput] = useState('')
+
+  useEffect(() => {
+    const grid = parseInput()
+    setSteps(0)
+    setDone(false)
+    let n = 0
+    const sim = simulate(grid)
+
+    const id = setIntervalImmediate(
+      () => {
+        const { value, done } = sim.next()
+        setSteps(n)
+        n++
+        if (value && showVisualization) setOutput(output2dArray(value))
+        if (done) {
+          setDone(true)
+          clearInterval(id)
+        }
+      },
+      showVisualization ? 100 : 0
+    )
+
+    return () => clearInterval(id)
+  }, [showVisualization])
 
   return (
-    <p>
-      Hello world <Answer>{n}</Answer>
-    </p>
+    <>
+      <p>
+        {done ? (
+          <>
+            The first step where no sea cucumbers move is{' '}
+            <Answer>{steps}</Answer>.
+          </>
+        ) : (
+          'Running...'
+        )}
+      </p>
+      <Visualization>{output}</Visualization>
+    </>
   )
 }
