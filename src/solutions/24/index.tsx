@@ -70,7 +70,7 @@ export const Part2 = () => {
 
   return (
     <p>
-      The largest model number accepted by MONAD is <Answer>{min}</Answer>.
+      The smallest model number accepted by MONAD is <Answer>{min}</Answer>.
     </p>
   )
 }
